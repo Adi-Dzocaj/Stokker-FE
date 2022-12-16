@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<p>hello</p>
+		<p>hello2</p>
 	</div>
 </template>
 
