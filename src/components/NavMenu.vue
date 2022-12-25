@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="outer-nav-menu">
     <div class="nav-menu">
       <router-link to="#" class="nav-item">
         <span class="nav-link">My transactions</span>
@@ -16,6 +16,7 @@
       <span class="bar"></span>
       <span class="bar"></span>
     </div>
+    <!-- <font-awesome-icon icon="fa-solid fa-user-tie" /> -->
   </div>
 </template>
 
@@ -42,14 +43,19 @@ const toggleMenuActivation = () => {
 </script>
 
 <style scoped>
+.outer-nav-menu {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 a {
   color: black;
   text-decoration: none;
 }
 
 .nav-menu {
-  display: flex;
-  gap: 60px;
+  display: inline-flex;
+  gap: 10px;
 }
 
 .nav-link {

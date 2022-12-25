@@ -1,18 +1,18 @@
 <template>
   <div class="nav-container">
-    <Hamburger />
     <router-link class="header-logo" to="#">Stokker</router-link>
-    <span>+</span>
+    <NavMenu />
   </div>
 </template>
 
 <script setup>
-import Hamburger from "../Hamburger.vue";
+import NavMenu from "../NavMenu.vue";
 </script>
 
 <style scoped>
 .nav-container {
   min-height: 70px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
