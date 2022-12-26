@@ -1,31 +1,17 @@
 <template>
   <div class="nav-container">
-    <router-link class="header-logo" to="#">Stokker</router-link>
-    <div class="outer-nav-menu">
-      <div class="nav-menu">
-        <router-link to="#" class="nav-item">
-          <span class="nav-link">Transactions</span>
-        </router-link>
-        <div>
-          <router-link to="#" class="nav-item">
-            <span class="nav-link"
-              ><font-awesome-icon
-                class="profile-icon"
-                icon="fa-solid fa-user-tie"
-            /></span>
-          </router-link>
-        </div>
-        <!-- <router-link to="#" class="nav-item">
-        <span class="nav-link">About</span>
-      </router-link> -->
-      </div>
-      <div class="hamburger" @click="toggleMenuActivation()">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </div>
-      <!-- <font-awesome-icon icon="fa-solid fa-user-tie" /> -->
+    <div class="nav-menu">
+      <router-link to="#" class="nav-item">
+        <span class="nav-link">Transactions</span>
+      </router-link>
     </div>
+    <div class="hamburger" @click="toggleMenuActivation()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <router-link class="header-logo" to="#">Stokker</router-link>
+    <font-awesome-icon class="profile-icon" icon="fa-solid fa-user-tie" />
   </div>
 </template>
 
@@ -58,29 +44,28 @@ const toggleMenuActivation = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 24px;
   background-color: #344d67;
   color: white;
 }
 
 .header-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-style: italic;
   font-weight: 600;
   font-size: 24px;
-  text-decoration: none;
-  color: white;
+  text-decoration: underline;
+  color: #ffe1a1;
+  width: 33%;
 }
 
 .profile-icon {
-  font-size: 25px;
-  color: #ffe1a1;
+  font-size: 30px;
+  color: white;
+  width: 33%;
 }
 
-.outer-nav-menu {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
 a {
   color: black;
   text-decoration: none;
@@ -90,12 +75,12 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  width: 33%;
 }
 
 .nav-link {
   transition: 0.7s ease;
-  font-size: 20px;
+  font-size: 24px;
   color: white;
 }
 
@@ -120,6 +105,7 @@ a {
 @media (max-width: 768px) {
   .hamburger {
     display: block;
+    width: 33%;
   }
 
   .hamburger.active .bar:nth-child(2) {
@@ -146,13 +132,12 @@ a {
     height: 100%;
     transition: 0.3s;
     padding: 30px;
+    border-top: 1px solid #ffe1a1;
   }
 
   .nav-item {
-    margin: 16px 0;
     background-color: #344d67;
     border-bottom: 1px solid #ffe1a1;
-    padding: 10px;
   }
 
   .nav-item:hover {
