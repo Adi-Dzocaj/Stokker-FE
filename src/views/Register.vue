@@ -40,6 +40,9 @@
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 const router = useRouter();
 const email = ref("");
@@ -53,6 +56,7 @@ const register = async () => {
       password.value
     );
     console.log("Registered");
+    toast.success("Registration complete!");
     router.push("/");
   } catch (error) {
     console.log(error.code);

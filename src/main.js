@@ -10,9 +10,12 @@ import { faUserTie,  } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faGithub, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faUserTie, faGoogle, faGithub, faFacebook);
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 import { initializeApp } from "firebase/app";
+
+library.add(faUserTie, faGoogle, faGithub, faFacebook);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,5 +28,4 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-
-createApp(App).use(router).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
+createApp(App).use(router).use(Toast).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
