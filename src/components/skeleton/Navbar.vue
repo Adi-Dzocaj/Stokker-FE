@@ -10,8 +10,11 @@
       <span class="bar"></span>
       <span class="bar"></span>
     </div>
-    <router-link class="header-logo" to="#">Stokker</router-link>
-    <font-awesome-icon class="profile-icon" icon="fa-solid fa-user-tie" />
+    <router-link class="header-logo" to="/">Stokker</router-link>
+    <!-- <font-awesome-icon class="profile-icon" icon="fa-solid fa-user-tie" /> -->
+    <div class="profile-icon">
+      <router-link to="/login"> <button>Sign in</button></router-link>
+    </div>
   </div>
 </template>
 
@@ -61,6 +64,9 @@ const toggleMenuActivation = () => {
 }
 
 .profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 30px;
   color: white;
   width: 33%;

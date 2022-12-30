@@ -15,14 +15,11 @@
         </div>
         <button class="register-button" @click="register">Register</button>
       </div>
-      <h4 class="register-menu-header">Register with your Google Account</h4>
-      <!-- <div class="register-menu-alternate-registration"> -->
       <font-awesome-icon
         @click="authenticateWithGoogleAccount"
         class="register-menu-icon"
         icon="fa-brands fa-google"
       />
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -93,7 +90,7 @@ const authenticateWithGoogleAccount = async () => {
   height: auto;
   border: 3px solid #344d67;
   border-radius: 1rem;
-  padding: 10px;
+  padding: 20px;
   gap: 20px;
 }
 
@@ -133,13 +130,6 @@ const authenticateWithGoogleAccount = async () => {
   border-radius: 4px;
   color: white;
   padding: 5px;
-}
-
-.register-menu-alternate-registration {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  width: 70%;
 }
 
 .register-menu-icon {

@@ -15,6 +15,9 @@
         </div>
         <!-- <div class="login-menu-actions"> -->
         <button class="login-button" @click="login">Log in</button>
+        <router-link to="/register" class="registration-link"
+          >Register an account</router-link
+        >
         <!-- </div> -->
       </div>
       <font-awesome-icon
@@ -98,7 +101,7 @@ const authenticateWithGoogleAccount = async () => {
   height: auto;
   border: 3px solid #344d67;
   border-radius: 1rem;
-  padding: 10px;
+  padding: 20px;
   gap: 20px;
 }
 
@@ -141,16 +144,19 @@ const authenticateWithGoogleAccount = async () => {
   padding: 5px;
 }
 
-.login-menu-alternate-registration {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  width: 70%;
+.registration-link {
+  text-align: center;
+  color: #344d67;
+  text-decoration: none;
+}
+
+.registration-link:hover {
+  opacity: 0.8;
 }
 
 .login-menu-icon {
   font-size: 60px;
-  padding: 10px;
+  /* padding: 10px; */
   color: #344d67;
 }
 
