@@ -76,12 +76,13 @@ a {
   align-items: center;
   justify-content: center;
   width: 33%;
+  z-index: 10;
 }
 
 .nav-link {
   transition: 0.7s ease;
   font-size: 24px;
-  color: white;
+  color: black;
 }
 
 .nav-link:hover {
@@ -122,17 +123,16 @@ a {
   gap: 0;
   display: flex;
   flex-direction: column;
-  background-color: #344d67;
+  background-color: #ffe1a1;
   width: 100%;
   height: 100%;
   transition: 0.3s;
   padding: 30px;
-  border-top: 1px solid #ffe1a1;
 }
 
 .nav-item {
-  background-color: #344d67;
-  border-bottom: 1px solid #ffe1a1;
+  background-color: #ffe1a1;
+  border-bottom: 1px solid black;
 }
 
 .nav-item:hover {
@@ -153,6 +153,12 @@ a {
     width: 33%;
     padding: initial;
     border-top: initial;
+    background-color: #344d67;
+  }
+
+  .nav-link {
+    color: white;
+    background-color: #344d67;
   }
 
   .nav-item {
