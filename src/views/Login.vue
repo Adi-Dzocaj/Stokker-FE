@@ -17,19 +17,67 @@
         <button class="login-button" @click="login">Log in</button>
         <!-- </div> -->
       </div>
-      <div class="login-menu-alternate-registration">
-        <font-awesome-icon class="login-menu-icon" icon="fa-brands fa-google" />
-        <font-awesome-icon class="login-menu-icon" icon="fa-brands fa-github" />
-        <font-awesome-icon
-          class="login-menu-icon"
-          icon="fa-brands fa-facebook"
-        />
-      </div>
+      <font-awesome-icon
+        @click="authenticateWithGoogleAccount"
+        class="login-menu-icon"
+        icon="fa-brands fa-google"
+      />
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { useToast } from "vue-toastification";
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const toast = useToast();
+
+const email = ref("");
+const password = ref("");
+
+const login = async () => {
+  try {
+    await signInWithEmailAndPassword(getAuth(), email.value, password.value);
+    console.log("Logged in");
+    toast.success("Logged in!");
+    router.push("/");
+  } catch (error) {
+    console.log(error.code);
+    if (error.code === "auth/invalid-email") {
+      toast.warning("Incorrect email");
+    } else if (error.code === "auth/user-not-found") {
+      toast.warning("We couldn't find that user");
+    } else if (error.code === "auth/wrong-password") {
+      toast.warning("Incorrect password");
+    } else {
+      toast.warning("Email or password was incorrect");
+    }
+  }
+};
+
+// Can be moved to separate Google Auth component
+const authenticateWithGoogleAccount = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(getAuth(), provider);
+    console.log("Registered with Google");
+    toast.success("Google registration complete!");
+    router.push("/");
+  } catch (error) {
+    console.log(error.code);
+    toast.warning(error.message);
+  }
+};
+</script>
 
 <style scoped>
 .login-container {
@@ -102,10 +150,13 @@
 
 .login-menu-icon {
   font-size: 60px;
-  /* flex-grow: 1; */
   padding: 10px;
-  /* background-color: #ffe1a1; */
-  border-radius: 50px;
-  border: 1px solid #344d67;
+  color: #344d67;
+}
+
+/* Desktop Styling */
+.login-menu-icon:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 </style>

@@ -18,7 +18,7 @@
       <h4 class="register-menu-header">Register with your Google Account</h4>
       <!-- <div class="register-menu-alternate-registration"> -->
       <font-awesome-icon
-        @click="registerWithGoogleAccount"
+        @click="authenticateWithGoogleAccount"
         class="register-menu-icon"
         icon="fa-brands fa-google"
       />
@@ -60,7 +60,7 @@ const register = async () => {
   }
 };
 
-const registerWithGoogleAccount = async () => {
+const authenticateWithGoogleAccount = async () => {
   const provider = new GoogleAuthProvider();
   try {
     await signInWithPopup(getAuth(), provider);
