@@ -53,7 +53,7 @@ const register = async () => {
     router.push("/");
   } catch (error) {
     console.log(error.code);
-    alert(error.message);
+    toast.error(error.code);
   }
 };
 

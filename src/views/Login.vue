@@ -56,13 +56,13 @@ const login = async () => {
   } catch (error) {
     console.log(error.code);
     if (error.code === "auth/invalid-email") {
-      toast.warning("Incorrect email");
+      toast.error("Incorrect email");
     } else if (error.code === "auth/user-not-found") {
-      toast.warning("We couldn't find that user");
+      toast.error("We couldn't find that user");
     } else if (error.code === "auth/wrong-password") {
-      toast.warning("Incorrect password");
+      toast.error("Incorrect password");
     } else {
-      toast.warning("Email or password was incorrect");
+      toast.error("Email or password was incorrect");
     }
   }
 };
