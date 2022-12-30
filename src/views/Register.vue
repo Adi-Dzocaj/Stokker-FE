@@ -15,23 +15,14 @@
         </div>
         <button class="register-button" @click="register">Register</button>
       </div>
-      <h4 class="register-menu-header">
-        Or log in through an alternate source
-      </h4>
-      <div class="register-menu-alternate-registration">
-        <font-awesome-icon
-          class="register-menu-icon"
-          icon="fa-brands fa-google"
-        />
-        <font-awesome-icon
-          class="register-menu-icon"
-          icon="fa-brands fa-github"
-        />
-        <font-awesome-icon
-          class="register-menu-icon"
-          icon="fa-brands fa-facebook"
-        />
-      </div>
+      <h4 class="register-menu-header">Register with your Google Account</h4>
+      <!-- <div class="register-menu-alternate-registration"> -->
+      <font-awesome-icon
+        @click="registerWithGoogleAccount"
+        class="register-menu-icon"
+        icon="fa-brands fa-google"
+      />
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -39,7 +30,12 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
@@ -57,6 +53,19 @@ const register = async () => {
     );
     console.log("Registered");
     toast.success("Registration complete!");
+    router.push("/");
+  } catch (error) {
+    console.log(error.code);
+    alert(error.message);
+  }
+};
+
+const registerWithGoogleAccount = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(getAuth(), provider);
+    console.log("Registered with Google");
+    toast.success("Google registration complete!");
     router.push("/");
   } catch (error) {
     console.log(error.code);
@@ -135,10 +144,13 @@ const register = async () => {
 
 .register-menu-icon {
   font-size: 60px;
-  /* flex-grow: 1; */
   padding: 10px;
-  /* background-color: #ffe1a1; */
-  border-radius: 50px;
-  border: 1px solid #344d67;
+  color: #344d67;
+}
+
+/* Desktop Styling */
+.register-menu-icon:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 </style>
