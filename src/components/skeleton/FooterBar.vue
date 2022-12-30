@@ -14,7 +14,7 @@
   height: 20vh;
   width: 100%;
   background-color: #344d67;
-  position: absolute;
+  position: fixed;
   bottom: 0;
 }
 

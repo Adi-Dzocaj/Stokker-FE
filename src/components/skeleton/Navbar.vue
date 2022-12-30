@@ -39,7 +39,7 @@ const toggleMenuActivation = () => {
 
 <style scoped>
 .nav-container {
-  min-height: 70px;
+  height: 10vh;
   width: 100%;
   display: flex;
   justify-content: space-between;
