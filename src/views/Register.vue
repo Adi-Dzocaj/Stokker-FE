@@ -50,7 +50,7 @@ const register = async () => {
     );
     console.log("Registered");
     toast.success("Registration complete!");
-    router.push("/");
+    router.push("/dashboard");
   } catch (error) {
     if (error.code === "auth/invalid-email") {
       toast.error("Email format is not accepted");
@@ -67,7 +67,7 @@ const authenticateWithGoogleAccount = async () => {
     await signInWithPopup(getAuth(), provider);
     console.log("Registered with Google");
     toast.success("Google registration complete!");
-    router.push("/");
+    router.push("/dashboard");
   } catch (error) {
     console.log(error.code);
     alert(error.message);

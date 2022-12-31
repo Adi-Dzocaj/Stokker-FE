@@ -52,7 +52,7 @@ const login = async () => {
     await signInWithEmailAndPassword(getAuth(), email.value, password.value);
     console.log("Logged in");
     toast.success("Logged in!");
-    router.push("/");
+    router.push("/dashboard");
   } catch (error) {
     console.log(error.code);
     if (error.code === "auth/user-not-found") {
@@ -71,7 +71,7 @@ const authenticateWithGoogleAccount = async () => {
     await signInWithPopup(getAuth(), provider);
     console.log("Registered with Google");
     toast.success("Google registration complete!");
-    router.push("/");
+    router.push("/dashboard");
   } catch (error) {
     console.log(error.code);
     toast.warning(error.message);
