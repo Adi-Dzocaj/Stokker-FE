@@ -52,8 +52,12 @@ const register = async () => {
     toast.success("Registration complete!");
     router.push("/");
   } catch (error) {
-    console.log(error.code);
-    toast.error(error.code);
+    if (error.code === "auth/invalid-email") {
+      toast.error("Email format is not accepted");
+    } else if (error.code === "auth/weak-password") {
+      toast.error("Password is not accepted");
+    }
+    return;
   }
 };
 

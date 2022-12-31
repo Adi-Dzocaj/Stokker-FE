@@ -13,18 +13,29 @@
     <router-link class="header-logo" to="/">Stokker</router-link>
     <!-- <font-awesome-icon class="profile-icon" icon="fa-solid fa-user-tie" /> -->
     <div class="profile-icon">
-      <router-link to="/login"> <button>Sign in</button></router-link>
+      <div class="profile-icon-inner">
+        <ButtonComponent
+          color="#FFE1A1"
+          location="/login"
+          content="Sign in"
+          fsize="12px"
+          padding="10px"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import ButtonComponent from "../ButtonComponent.vue";
 
 const hamburger = document.getElementsByClassName("hamburger");
 const navMenu = document.getElementsByClassName("nav-menu");
 
-const count = ref(0);
+// const publishedBooksMessage = computed(() => {
+//   return (count = 0 ? "/login" : "/register");
+// });
 
 const toggleMenuActivation = () => {
   if (
@@ -72,6 +83,12 @@ const toggleMenuActivation = () => {
   width: 33%;
 }
 
+.profile-icon-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 a {
   color: black;
   text-decoration: none;
@@ -101,7 +118,7 @@ a {
   height: 3px;
   margin: 5px auto;
   -webkit-transition: all 0.3s ease-in-out;
-  background-color: white;
+  background-color: #ffe1a1;
 }
 
 .hamburger {
@@ -163,7 +180,7 @@ a {
   }
 
   .nav-link {
-    color: white;
+    color: #ffe1a1;
     background-color: #344d67;
   }
 

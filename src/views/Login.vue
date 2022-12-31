@@ -55,15 +55,12 @@ const login = async () => {
     router.push("/");
   } catch (error) {
     console.log(error.code);
-    if (error.code === "auth/invalid-email") {
-      toast.error("Incorrect email");
-    } else if (error.code === "auth/user-not-found") {
+    if (error.code === "auth/user-not-found") {
       toast.error("We couldn't find that user");
-    } else if (error.code === "auth/wrong-password") {
-      toast.error("Incorrect password");
     } else {
       toast.error("Email or password was incorrect");
     }
+    return;
   }
 };
 
@@ -147,11 +144,13 @@ const authenticateWithGoogleAccount = async () => {
 .registration-link {
   text-align: center;
   color: #344d67;
+  opacity: 0.9;
   text-decoration: none;
 }
 
 .registration-link:hover {
-  opacity: 0.8;
+  opacity: 1;
+  text-decoration: underline;
 }
 
 .login-menu-icon {
