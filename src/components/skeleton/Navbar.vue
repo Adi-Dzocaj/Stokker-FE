@@ -15,9 +15,10 @@
     <div class="profile-icon">
       <div class="profile-icon-inner">
         <ButtonComponent
+          :action="handleConditionalSignOut"
           color="#FFE1A1"
-          location="/login"
-          content="Sign in"
+          :location="setLocationProp"
+          :content="setContentProp"
           fsize="12px"
           padding="10px"
         />
@@ -29,13 +30,32 @@
 <script setup>
 import { ref, computed } from "vue";
 import ButtonComponent from "../ButtonComponent.vue";
+import { useUserStore } from "../../store/userStore";
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const userStore = useUserStore();
 
 const hamburger = document.getElementsByClassName("hamburger");
 const navMenu = document.getElementsByClassName("nav-menu");
 
-// const publishedBooksMessage = computed(() => {
-//   return (count = 0 ? "/login" : "/register");
-// });
+const handleConditionalSignOut = () => {
+  if (userStore.user) {
+    userStore.handleSignOut();
+    router.push("/");
+  } else {
+    return;
+  }
+};
+
+const setLocationProp = computed(() => {
+  return userStore.user ? "/" : "/login";
+});
+
+const setContentProp = computed(() => {
+  return userStore.user ? "Log out" : "Log in";
+});
 
 const toggleMenuActivation = () => {
   if (

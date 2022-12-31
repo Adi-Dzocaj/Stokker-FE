@@ -1,6 +1,8 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { defineStore } from 'pinia';
-import { getAuth } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
+
+
 
 export const useUserStore = defineStore('userStore', {
   state: () => {
@@ -25,6 +27,12 @@ export const useUserStore = defineStore('userStore', {
                 this.loading = false
             }
         })
-    }
+    },
+    async handleSignOut() {
+        let auth = getAuth()
+        await signOut(auth);
+        this.user = null;
+        console.log(this.user);
+      },
   },
 });

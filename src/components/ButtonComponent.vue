@@ -1,10 +1,10 @@
 <script setup>
 import { defineProps } from "vue";
-defineProps(["color", "content", "location", "fsize", "padding"]);
+defineProps(["color", "content", "location", "fsize", "padding", "action"]);
 </script>
 
 <template>
-  <router-link class="button" :to="location">
+  <router-link class="button" @click="action" :to="location">
     {{ content }}
   </router-link>
 </template>

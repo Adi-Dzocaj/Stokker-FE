@@ -15,9 +15,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <Navbar />
-  <FooterBar />
-  <router-view></router-view>
+  <div v-if="userStore.loading">
+    <p>Loading...</p>
+  </div>
+  <div v-else>
+    <Navbar />
+    <FooterBar />
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped></style>
