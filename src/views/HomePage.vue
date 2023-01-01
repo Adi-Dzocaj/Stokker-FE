@@ -2,7 +2,7 @@
   <div class="hero-image">
     <div class="hero-content">
       <h4>The ultimate trading platform for beginners</h4>
-      <div class="hero-button">
+      <div class="hero-button" v-if="!userStore.user">
         <ButtonComponent
           color="#FFE1A1"
           location="/register"
@@ -17,6 +17,8 @@
 
 <script setup>
 import ButtonComponent from "../components/ButtonComponent.vue";
+import { useUserStore } from "../store/userStore";
+const userStore = useUserStore();
 </script>
 
 <style scoped>
