@@ -17,8 +17,8 @@
         <ButtonComponent
           :action="handleConditionalSignOut"
           color="#FFE1A1"
-          :location="setLocationProp"
-          :content="setContentProp"
+          :location="globalContext.setLocationProp"
+          :content="globalContext.setContentProp"
           fsize="12px"
           padding="10px"
         />
@@ -31,11 +31,13 @@
 import { ref, computed } from "vue";
 import ButtonComponent from "../ButtonComponent.vue";
 import { useUserStore } from "../../store/userStore";
+import { useGlobalContext } from "../../store/globalContext";
 
 import { useRouter } from "vue-router";
 const router = useRouter();
 
 const userStore = useUserStore();
+const globalContext = useGlobalContext();
 
 const hamburger = document.getElementsByClassName("hamburger");
 const navMenu = document.getElementsByClassName("nav-menu");
@@ -48,14 +50,6 @@ const handleConditionalSignOut = () => {
     return;
   }
 };
-
-const setLocationProp = computed(() => {
-  return userStore.user ? "/" : "/login";
-});
-
-const setContentProp = computed(() => {
-  return userStore.user ? "Log out" : "Log in";
-});
 
 const toggleMenuActivation = () => {
   if (

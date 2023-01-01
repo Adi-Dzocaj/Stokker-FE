@@ -1,10 +1,56 @@
 <template>
-  <div>
-    <p>hello</p>
-    <p>hello2</p>
+  <div class="hero-image">
+    <div class="hero-content">
+      <h4>The ultimate trading platform for beginners</h4>
+      <div class="hero-button">
+        <ButtonComponent
+          color="#FFE1A1"
+          location="/register"
+          content="Register an account and start paper trading today"
+          fsize="12px"
+          padding="10px"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import ButtonComponent from "../components/ButtonComponent.vue";
+</script>
 
-<style scoped></style>
+<style scoped>
+.hero-image {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../assets/hero-img.jpg");
+}
+
+.hero-content {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.hero-button {
+  opacity: 0.9;
+}
+.hero-button:hover {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    font-size: 20px;
+  }
+}
+</style>
