@@ -27,7 +27,7 @@ onMounted(async () => {
   </div>
   <div class="app" v-else>
     <Navbar />
-    <router-view></router-view>
+    <router-view class="router-view"></router-view>
     <FooterBar />
   </div>
 </template>
@@ -36,5 +36,9 @@ onMounted(async () => {
 .app {
   display: flex;
   flex-direction: column;
+}
+
+.router-view {
+  min-height: calc(100vh - 10vh - 20vh);
 }
 </style>
