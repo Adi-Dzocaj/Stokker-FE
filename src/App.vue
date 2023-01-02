@@ -25,11 +25,16 @@ onMounted(async () => {
   <div v-if="userStore.loading">
     <p>Loading...</p>
   </div>
-  <div v-else>
+  <div class="app" v-else>
     <Navbar />
-    <FooterBar />
     <router-view></router-view>
+    <FooterBar />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.app {
+  display: flex;
+  flex-direction: column;
+}
+</style>

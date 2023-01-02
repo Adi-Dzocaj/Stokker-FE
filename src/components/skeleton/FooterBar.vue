@@ -14,8 +14,6 @@
   height: 20vh;
   width: 100%;
   background-color: #344d67;
-  position: fixed;
-  bottom: 0;
 }
 
 .footer-container div:nth-child(1) {

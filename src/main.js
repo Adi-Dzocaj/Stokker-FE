@@ -6,7 +6,6 @@ import { createPinia } from 'pinia';
 import router from '/src/router/index.js';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserTie,  } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faGithub, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -15,7 +14,7 @@ import "vue-toastification/dist/index.css";
 
 import { initializeApp } from "firebase/app";
 
-library.add(faUserTie, faGoogle, faGithub, faFacebook);
+library.add(faGoogle, faGithub, faFacebook);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
