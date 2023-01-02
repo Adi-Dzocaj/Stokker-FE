@@ -1,13 +1,13 @@
-<script setup>
-import { defineProps } from "vue";
-defineProps(["color", "content", "location", "fsize", "padding", "action"]);
-</script>
-
 <template>
   <router-link class="button" @click="action" :to="location">
     {{ content }}
   </router-link>
 </template>
+
+<script setup>
+import { defineProps } from "vue";
+defineProps(["color", "content", "location", "fsize", "padding", "action"]);
+</script>
 
 <style scoped>
 .button {
