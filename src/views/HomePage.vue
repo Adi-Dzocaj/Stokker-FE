@@ -1,5 +1,5 @@
 <template>
-  <div class="homepage">
+  <div>
     <div class="hero-image">
       <div class="hero-content">
         <h4>The ultimate trading platform for beginners</h4>
@@ -7,7 +7,7 @@
           <ButtonComponent
             color="#FFE1A1"
             location="/register"
-            content="Register an account and start paper trading today"
+            content="Register a free account and start paper trading today"
             fsize="12px"
             padding="10px"
           />
@@ -47,6 +47,17 @@ console.log(toRaw(globalStore.alpacaNewsData));
 </script>
 
 <style scoped>
+.hero-image::before {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../assets/hero-img.jpg");
+  height: 200px;
+  width: 100%;
+  position: absolute;
+  content: "";
+  opacity: 0.9;
+}
 .hero-image {
   height: 200px;
   width: 100%;
@@ -54,25 +65,16 @@ console.log(toRaw(globalStore.alpacaNewsData));
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("../assets/hero-img.jpg");
+  position: relative;
 }
 
 .hero-content {
+  z-index: 10;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 30px;
-}
-
-.hero-button {
-  opacity: 0.9;
-}
-.hero-button:hover {
-  opacity: 1;
 }
 
 .homepage-content {
