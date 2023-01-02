@@ -17,8 +17,8 @@
         <ButtonComponent
           :action="handleConditionalSignOut"
           color="#FFE1A1"
-          :location="globalContext.setLocationProp"
-          :content="globalContext.setContentProp"
+          :location="globalStore.setLocationProp"
+          :content="globalStore.setContentProp"
           fsize="12px"
           padding="10px"
         />
@@ -31,13 +31,13 @@
 import { ref, computed } from "vue";
 import ButtonComponent from "../ButtonComponent.vue";
 import { useUserStore } from "../../store/userStore";
-import { useGlobalContext } from "../../store/globalContext";
+import { useGlobalStore } from "../../store/globalStore";
 
 import { useRouter } from "vue-router";
 const router = useRouter();
 
 const userStore = useUserStore();
-const globalContext = useGlobalContext();
+const globalStore = useGlobalStore();
 
 const hamburger = document.getElementsByClassName("hamburger");
 const navMenu = document.getElementsByClassName("nav-menu");

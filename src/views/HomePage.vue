@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-image">
+  <div class="hero-image" v-if="globalStore.alpacaNewsData">
     <div class="hero-content">
       <h4>The ultimate trading platform for beginners</h4>
       <div class="hero-button" v-if="!userStore.user">
@@ -18,6 +18,8 @@
 <script setup>
 import ButtonComponent from "../components/ButtonComponent.vue";
 import { useUserStore } from "../store/userStore";
+import { useGlobalStore } from "../store/globalStore";
+const globalStore = useGlobalStore();
 const userStore = useUserStore();
 </script>
 

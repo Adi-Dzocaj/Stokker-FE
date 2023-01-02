@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
-import { useUserStore } from '../store/userStore'
+import { useUserStore } from './userStore'
 import { computed } from 'vue';
 
-export const useGlobalContext = defineStore("global", () => {
+export const useGlobalStore = defineStore("global", () => {
+  const alpacaNewsData = null;
+
     const setLocationProp = computed(() => {
         const userStore = useUserStore();
         return userStore.user ? "/" : "/login";
@@ -12,6 +14,7 @@ export const useGlobalContext = defineStore("global", () => {
         return userStore.user ? "Log out" : "Log in";
       });
     return {
+        alpacaNewsData,
         setLocationProp,
         setContentProp,
     };
