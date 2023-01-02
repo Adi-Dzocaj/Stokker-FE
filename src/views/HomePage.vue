@@ -23,7 +23,10 @@
           v-for="article in toRaw(globalStore.alpacaNewsData.news)"
           :key="article.summary"
         >
-          <ArticleComponent :content="article.headline" />
+          <ArticleComponent
+            :content="article.headline"
+            :location="article.url"
+          />
         </div>
       </div>
     </div>
