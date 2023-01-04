@@ -20,5 +20,6 @@ defineProps(["color", "content", "location", "fsize", "padding", "action"]);
   font-size: v-bind(fsize);
   font-weight: bold;
   font-style: italic;
+  color: black;
 }
 </style>

@@ -20,7 +20,7 @@ defineProps(["content", "location"]);
 }
 
 .article-link {
-  color: #344d67;
+  color: black;
   text-decoration: none;
 }
 
