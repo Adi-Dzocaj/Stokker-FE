@@ -13,6 +13,7 @@ export const useGlobalStore = defineStore("global", () => {
         const userStore = useUserStore();
         return userStore.user ? "Log out" : "Log in";
       });
+
     return {
         alpacaNewsData,
         setLocationProp,

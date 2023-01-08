@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import ApiData from "../services/ApiData";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import {
@@ -49,6 +50,15 @@ const register = async () => {
       password.value
     );
     console.log("Registered");
+    console.log(getAuth().currentUser.uid, getAuth().currentUser.email);
+
+    const userUid = getAuth().currentUser.uid;
+    await ApiData.postUser({
+      id: userUid,
+      email: getAuth().currentUser.email,
+    });
+
+    // await ApiData.getUsers();
     toast.success("Registration complete!");
     router.push("/dashboard");
   } catch (error) {

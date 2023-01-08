@@ -27,10 +27,10 @@ export const useUserStore = defineStore('userStore', {
         })
     },
     async handleSignOut() {
-        let auth = getAuth()
-        await signOut(auth);
-        this.user = null;
-        console.log(this.user);
-      },
+      let auth = getAuth()
+      await signOut(auth);
+      this.user = null;
+      console.log(this.user);
+    },
   },
 });
