@@ -76,6 +76,13 @@ const authenticateWithGoogleAccount = async () => {
   try {
     await signInWithPopup(getAuth(), provider);
     console.log("Registered with Google");
+    console.log(getAuth());
+    console.log(getAuth().currentUser.uid);
+    console.log(getAuth().currentUser.email);
+    await ApiData.postUser({
+      id: getAuth().currentUser.uid,
+      email: getAuth().currentUser.email,
+    });
     toast.success("Google registration complete!");
     router.push("/dashboard");
   } catch (error) {

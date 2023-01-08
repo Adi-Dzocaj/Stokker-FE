@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard">
+    <ModalComponent />
     <div class="account-balance-container">
       <AccountBalance />
     </div>
@@ -8,6 +9,7 @@
 
 <script setup>
 import AccountBalance from "../components/AccountBalanceComponent.vue";
+import ModalComponent from "../components/ModalComponent.vue";
 </script>
 
 <style scoped>
