@@ -1,6 +1,9 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { defineStore } from 'pinia';
 import { getAuth, signOut } from 'firebase/auth';
+import ApiData from '../services/ApiData';
+import { useGlobalStore } from '../store/globalStore'
+
 
 export const useUserStore = defineStore('userStore', {
   state: () => {
@@ -32,5 +35,12 @@ export const useUserStore = defineStore('userStore', {
       this.user = null;
       console.log(this.user);
     },
+    async getUserFromDbAndSetAccountBalanceState() {
+      const response = await ApiData.getSpecificUser(getAuth().currentUser.uid);
+      useGlobalStore().accountBalance = response.data.account.accountBalance
+      console.log(response.data.account.accountBalance)
+      console.log(response)
+      return
+    }
   },
 });

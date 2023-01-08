@@ -1,10 +1,14 @@
 <template>
   <div class="account-balance">
-    <h5 class="current-balance">10 453 $</h5>
+    <h5 class="current-balance">{{ globalStore.accountBalance }} $</h5>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useGlobalStore } from "../store/globalStore";
+
+const globalStore = useGlobalStore();
+</script>
 
 <style scoped>
 .account-balance {
