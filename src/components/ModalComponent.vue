@@ -7,7 +7,7 @@
           <!-- <p>Write the amount of cash you want to start trading with</p> -->
           <p class="muted-text">Example: 10.000 ( ten thousand )</p>
           <div class="input">
-            <input type="text" />
+            <input type="text" v-model="modalAccountBalanceInput" />
             <span>$</span>
           </div>
           <p class="muted-text">This amount can be changed later on</p>
@@ -30,6 +30,10 @@
 import GeneralButton from "../components/GeneralButton.vue";
 import { defineProps } from "vue";
 defineProps(["buttonContent"]);
+import { ref, defineExpose } from "vue";
+
+let modalAccountBalanceInput = ref();
+defineExpose({ modalAccountBalanceInput });
 </script>
 
 <style scoped>

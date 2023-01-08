@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <ModalComponent
+      ref="startingCapitalAmount"
       @close-modal="updateBalanceAndCloseModal"
       v-show="showModal"
       buttonContent="Save"
@@ -14,30 +15,32 @@
 <script setup>
 import AccountBalance from "../components/AccountBalanceComponent.vue";
 import ModalComponent from "../components/ModalComponent.vue";
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 import ApiData from "../services/ApiData";
 import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
+
+let showModal = ref(true);
+
+const startingCapitalAmount = ref(null);
 
 const userStore = useUserStore();
 
 userStore.getUserFromDbAndSetAccountBalanceState();
 
-// console.log(userStore.getUserFromDbAndSetAccountBalanceState().account);
-
 const updateBalanceAndCloseModal = async () => {
   console.log(getAuth().currentUser.uid);
+  console.log(startingCapitalAmount.value.modalAccountBalanceInput);
   getAuth().currentUser;
   await ApiData.updateAccount(getAuth().currentUser.uid, {
-    accountBalance: 50000,
-    unusedFunds: 50000,
+    accountBalance: startingCapitalAmount.value.modalAccountBalanceInput,
+    unusedFunds: startingCapitalAmount.value.modalAccountBalanceInput,
   });
 
   userStore.getUserFromDbAndSetAccountBalanceState();
 
-  showModal = false;
+  showModal.value = false;
 };
-let showModal = ref(true);
 </script>
 
 <style scoped>
