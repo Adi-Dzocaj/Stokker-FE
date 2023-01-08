@@ -86,4 +86,8 @@ defineProps(["buttonContent"]);
 .muted-text {
   color: #808080;
 }
+
+.modalButton:hover {
+  cursor: pointer;
+}
 </style>

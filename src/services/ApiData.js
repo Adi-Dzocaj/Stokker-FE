@@ -14,7 +14,14 @@ const getUsers = async (user) => {
     return response
 }
 
+const updateAccount = async (user, funds) => {
+    const response = await axios.put(`${BASE_URL}/Account/${user}`, funds)
+    console.log(response)
+    return response
+}
+
 export default {
     postUser,
-    getUsers
+    getUsers,
+    updateAccount
   };

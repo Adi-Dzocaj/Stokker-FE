@@ -70,7 +70,6 @@ const authenticateWithGoogleAccount = async () => {
   try {
     await signInWithPopup(getAuth(), provider);
     console.log(getAuth().currentUser.email);
-    console.log(getAuth().getUserByEmail("adidzocaj@gmail.com"));
     console.log("Registered with Google");
     toast.success("Google registration complete!");
     router.push("/dashboard");
