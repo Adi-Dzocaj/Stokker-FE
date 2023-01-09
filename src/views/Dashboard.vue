@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard" v-if="!loading">
     <ModalComponent
       ref="startingCapitalAmount"
       @close-modal="updateBalanceAndCloseModal"
@@ -10,17 +10,32 @@
       <AccountBalance />
     </div>
   </div>
+  <div v-else>Loading...</div>
 </template>
 
 <script setup>
 import AccountBalance from "../components/AccountBalanceComponent.vue";
 import ModalComponent from "../components/ModalComponent.vue";
-import { ref, toRaw } from "vue";
+import { ref, onMounted } from "vue";
 import ApiData from "../services/ApiData";
 import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
 
-let showModal = ref(true);
+let showModal = ref(Boolean);
+let loading = ref(true);
+
+onMounted(async () => {
+  loading.value = true;
+  const specificUser = await ApiData.getSpecificUser(getAuth().currentUser.uid);
+  console.log(specificUser.data.account.accountBalance);
+
+  if (specificUser.data.account.accountBalance > 0) {
+    showModal.value = false;
+  } else {
+    showModal.value = true;
+  }
+  loading.value = false;
+});
 
 const startingCapitalAmount = ref(null);
 

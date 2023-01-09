@@ -16,7 +16,7 @@ const getUsers = async (user) => {
 
 const getSpecificUser = async (user) => {
     const response = await axios.get(`${BASE_URL}/User/${user}`)
-    console.log(response)
+    console.log(response.data.account.accountBalance)
     return response
 }
 
