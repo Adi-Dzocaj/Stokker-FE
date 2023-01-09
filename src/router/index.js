@@ -3,6 +3,7 @@ import Homepage from '../views/HomePage.vue';
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Stockpanel from '../views/Stockpanel.vue'
 
 import {
 	getAuth,
@@ -22,6 +23,14 @@ const routes = [
 		path: '/dashboard',
 		name: 'Dashboard',
 		component: Dashboard,
+		meta: {
+			requiresAuth: true
+		}
+	},
+	{
+		path: '/stockpanel',
+		name: 'Stockpanel',
+		component: Stockpanel,
 		meta: {
 			requiresAuth: true
 		}

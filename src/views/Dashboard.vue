@@ -9,6 +9,7 @@
     <div class="account-balance-container">
       <AccountBalance />
     </div>
+    <router-link to="/stockpanel">stockpanel</router-link>
   </div>
   <div v-else>Loading...</div>
 </template>
