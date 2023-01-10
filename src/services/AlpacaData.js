@@ -14,17 +14,18 @@ const getNewsArticles = async () => {
 
 const getStocks = async () => {
     const response = await axios.get(`${Trading_API_BASE_URL}/v2/assets?asset_class=us_equity`, HEADERS)
-    // console.log(response.data[0].symbol)
-    // response.data.map((company) => {
-    //     if (company.symbol === 'AAPL') {
-    //         console.log(company)
-    //     }
-    // })
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
+}
+
+const getStockInfo = async (symbol, start, end, timeframe) => {
+    const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/${symbol}/bars?start=${start}&end=${end}&timeframe=${timeframe}`, HEADERS)
+    console.log(response)
+    return response
 }
 
 export default {
     getNewsArticles,
-    getStocks
+    getStocks,
+    getStockInfo
   };

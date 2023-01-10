@@ -11,11 +11,14 @@
     </div>
 
     <div v-if="searchStocks.length">
-      <div>
+      <h5 class="results-display">
         Showing {{ searchStocks.length }} of {{ stockList.length }} results
-      </div>
+      </h5>
       <div v-for="company in searchStocks" :key="company.name">
-        <ArticleComponent :content="company.name" location="/">
+        <ArticleComponent
+          :content="company.name"
+          :location="`/stockpanel/${company.symbol}`"
+        >
         </ArticleComponent>
       </div>
     </div>
@@ -44,6 +47,7 @@ const searchStocks = computed(() => {
   }
 
   let results = 0;
+
   return stockList.filter((company) => {
     if (
       company.name
@@ -83,5 +87,9 @@ const searchStocks = computed(() => {
 
 .autocomplete-input-field input:focus::placeholder {
   color: transparent;
+}
+
+.results-display {
+  margin-bottom: 10px;
 }
 </style>

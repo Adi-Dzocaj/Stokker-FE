@@ -79,10 +79,15 @@ const authenticateWithGoogleAccount = async () => {
     console.log(getAuth());
     console.log(getAuth().currentUser.uid);
     console.log(getAuth().currentUser.email);
-    await ApiData.postUser({
-      id: getAuth().currentUser.uid,
-      email: getAuth().currentUser.email,
-    });
+    try {
+      await ApiData.postUser({
+        id: getAuth().currentUser.uid,
+        email: getAuth().currentUser.email,
+      });
+    } catch (error) {
+      console.log("Account already exists in the Db - proceed to log in");
+    }
+
     toast.success("Google registration complete!");
     router.push("/dashboard");
   } catch (error) {
