@@ -1,46 +1,87 @@
 <template>
-  <div>
-    <v-autocomplete
-      label="Find a stock"
-      item-title="name"
-      :menu-props="{ maxHeight: '200px' }"
-      clearable
-      hide-details
-      hide-selected
-      :items="testingList"
-    >
-    </v-autocomplete>
+  <div class="stock-panel">
+    <div class="autocomplete-input-field">
+      <input
+        type="text"
+        placeholder="Find a stock"
+        v-model="autocompleteInput"
+        autoComplete="off"
+        :disabled="isInputFieldDisabled"
+      />
+    </div>
+
+    <div v-if="searchStocks.length">
+      <div>
+        Showing {{ searchStocks.length }} of {{ stockList.length }} results
+      </div>
+      <div v-for="company in searchStocks" :key="company.name">
+        <ArticleComponent :content="company.name" location="/">
+        </ArticleComponent>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onBeforeMount, reactive, toRaw, ref, watch } from "vue";
+import { ref, computed, onBeforeMount, watch } from "vue";
 import AlpacaData from "../services/AlpacaData";
+import ArticleComponent from "../components/ArticleComponent.vue";
 
-// let stockList = reactive([]);
+let autocompleteInput = ref("");
 
-// let loading = ref(Boolean);
+let stockList = ref([]);
+let isInputFieldDisabled = ref(true);
 
-// let stockList = [];
+onBeforeMount(async () => {
+  stockList = await AlpacaData.getStocks();
+  isInputFieldDisabled.value = false;
+  console.log(stockList);
+});
 
-let testingList = [
-  { name: "Apple", symbol: "aapl" },
-  { name: "Microsoft" },
-  { name: "OSFOS" },
-  { name: "BAKOS" },
-  { name: "JASO" },
-];
+const searchStocks = computed(() => {
+  if (autocompleteInput.value === "") {
+    return [];
+  }
 
-// onBeforeMount(async () => {
-//   loading.value = true;
-//   //   const oneStock = await AlpacaData.getStocks();
-//   //   stockList.push(oneStock);
-//   stockList = await AlpacaData.getStocks();
-
-//   //   console.log(stockList);
-//   loading.value = false;
-// });
+  let results = 0;
+  return stockList.filter((company) => {
+    if (
+      company.name
+        .toLowerCase()
+        .includes(autocompleteInput.value.toLowerCase()) &&
+      results < 20
+    ) {
+      results++;
+      return company;
+    }
+  });
+});
 </script>
 
-<style scoped></style>
-item-title="name" v-if="loading === false"
+<style scoped>
+.stock-panel {
+  margin: 20px;
+}
+
+.autocomplete-input-field {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.autocomplete-input-field input {
+  text-align: center;
+  width: 100%;
+  border: 1px solid #344d67;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.autocomplete-input-field input:focus {
+  border: 1px solid yellow;
+}
+
+.autocomplete-input-field input:focus::placeholder {
+  color: transparent;
+}
+</style>
