@@ -18,6 +18,11 @@ const getStocks = async () => {
     return response.data
 }
 
+const getSingleStock = async (symbol) => {
+    const response = await axios.get(`${Trading_API_BASE_URL}/v2/assets/${symbol}`, HEADERS)
+    return response.data
+}
+
 const getStockInfo = async (symbol, start, end, timeframe) => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/${symbol}/bars?start=${start}&end=${end}&timeframe=${timeframe}`, HEADERS)
     console.log(response)
@@ -27,5 +32,6 @@ const getStockInfo = async (symbol, start, end, timeframe) => {
 export default {
     getNewsArticles,
     getStocks,
-    getStockInfo
+    getStockInfo,
+    getSingleStock
   };
