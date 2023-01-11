@@ -51,28 +51,7 @@ ChartJS.register(
   Legend
 );
 
-const data = {
-  labels: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      backgroundColor: "#344d67",
-      data: [40, 39, 10, 40, 39, 80, 50, 60, 70, 80, 90, 100],
-    },
-  ],
-};
+let data = Array;
 
 const options = {
   responsive: true,
@@ -101,15 +80,50 @@ onMounted(async () => {
 
   stockData = await AlpacaData.getStockInfo(
     props.symbol,
-    "2023-01-10T0:00:00Z",
-    "2023-01-10T20:00:00Z",
-    "1Day"
+    "2022-01-01T0:00:00Z",
+    "2023-01-01T20:00:00Z",
+    "1Month"
   );
 
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
   stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
 
+  data = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    datasets: [
+      {
+        backgroundColor: "#344d67",
+        data: [
+          stockData.data.bars[0].c,
+          stockData.data.bars[1].c,
+          stockData.data.bars[2].c,
+          stockData.data.bars[3].c,
+          stockData.data.bars[4].c,
+          stockData.data.bars[5].c,
+          stockData.data.bars[6].c,
+          stockData.data.bars[7].c,
+          stockData.data.bars[8].c,
+          stockData.data.bars[9].c,
+          stockData.data.bars[10].c,
+          stockData.data.bars[11].c,
+        ],
+      },
+    ],
+  };
   console.log(stockNews);
 
   console.log(props.symbol);
