@@ -1,10 +1,10 @@
 <template>
   <div class="article-section-content">
-    <router-link class="article-link" :to="location">
+    <a class="article-link" :href="location">
       <h6>
         {{ content }}
       </h6>
-    </router-link>
+    </a>
   </div>
 </template>
 

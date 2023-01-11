@@ -12,7 +12,8 @@
 
     <div v-if="searchStocks.length">
       <h5 class="results-display">
-        Showing {{ searchStocks.length }} of {{ stockList.length }} results
+        Showing {{ searchStocks.length }} of
+        {{ filteredStockList.length }} results
       </h5>
       <div v-for="company in searchStocks" :key="company.name">
         <ArticleComponent
@@ -34,9 +35,20 @@ let autocompleteInput = ref("");
 
 let stockList = ref([]);
 let isInputFieldDisabled = ref(true);
+let filteredStockList = ref([]);
 
 onBeforeMount(async () => {
   stockList = await AlpacaData.getStocks();
+
+  console.log(stockList[0].tradable);
+
+  stockList.filter((company) => {
+    if (company.tradable !== false) {
+      filteredStockList.value.push(company);
+    }
+  });
+
+  console.log(filteredStockList);
   isInputFieldDisabled.value = false;
   console.log(stockList);
 });
@@ -48,7 +60,7 @@ const searchStocks = computed(() => {
 
   let results = 0;
 
-  return stockList.filter((company) => {
+  return filteredStockList.value.filter((company) => {
     if (
       company.name
         .toLowerCase()
