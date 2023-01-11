@@ -16,12 +16,10 @@
     </div>
     <div class="homepage-content" v-if="globalStore.alpacaNewsData">
       <div class="article-section-container">
-        <div class="article-section-header">
-          <h4>Stock News</h4>
-        </div>
+        <ArticleSectionHeaderComponent />
         <div
           v-for="article in toRaw(globalStore.alpacaNewsData.news)"
-          :key="article.summary"
+          :key="article.id"
         >
           <ArticleComponent
             :content="article.headline"
@@ -39,6 +37,7 @@ import { useUserStore } from "../store/userStore";
 import { useGlobalStore } from "../store/globalStore";
 import ArticleComponent from "../components/ArticleComponent.vue";
 import { toRaw } from "vue";
+import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
 
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
@@ -85,12 +84,6 @@ console.log(toRaw(globalStore.alpacaNewsData));
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.article-section-header h4 {
-  display: inline;
-  border-bottom: 1px solid lightgray;
-  padding-bottom: 5px;
 }
 
 @media (min-width: 768px) {

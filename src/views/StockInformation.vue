@@ -1,12 +1,20 @@
 <template>
   <div class="stock-information" v-if="!loading">
-    <div class="stock-name">
-      <h6>
-        {{ stockInformation.name }}
-      </h6>
+    <div>
+      <div class="stock-name">
+        <h6>
+          {{ stockInformation.name }}
+        </h6>
+      </div>
+      <div class="stock-ticker">
+        <p>{{ stockInformation.exchange }} | {{ stockInformation.class }}</p>
+        <span>{{ stockInformation.symbol }}</span>
+      </div>
     </div>
-    <div class="stock-ticker">
-      <span>{{ stockInformation.symbol }}</span>
+    <Line :data="data" :options="options" />
+    <ArticleSectionHeaderComponent />
+    <div class="news-articles" v-for="article in stockNews" :key="article.id">
+      <ArticleComponent :content="article.headline" :location="article.url" />
     </div>
   </div>
   <div v-else>
@@ -17,9 +25,68 @@
 <script setup>
 import { onMounted, defineProps, ref, reactive } from "vue";
 import AlpacaData from "../services/AlpacaData";
+import ArticleComponent from "../components/ArticleComponent.vue";
+import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
+
+// ChartJS
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "vue-chartjs";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const data = {
+  labels: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+  datasets: [
+    {
+      backgroundColor: "#344d67",
+      data: [40, 39, 10, 40, 39, 80, 50, 60, 70, 80, 90, 100],
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
+// ChartJS
 
 let stockData = ref([]);
 let stockInformation = reactive({});
+let stockNews = ref([]);
 let loading = ref(true);
 
 const props = defineProps({
@@ -41,7 +108,13 @@ onMounted(async () => {
 
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
+  stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
+
+  console.log(stockNews);
+
   console.log(props.symbol);
+  console.log(stockData);
+  console.log(stockInformation);
 
   loading.value = false;
 });
@@ -49,6 +122,9 @@ onMounted(async () => {
 
 <style scoped>
 .stock-information {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   margin: 20px;
 }
 
@@ -60,7 +136,15 @@ onMounted(async () => {
 
 .stock-ticker {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stock-ticker span {
   color: #808080;
+}
+
+.stock-ticker p {
+  font-size: 12px;
 }
 </style>
