@@ -16,7 +16,13 @@
       :data="
         userRequestedChartDataBasedOnTime[3].active === true
           ? chartData_YEAR
-          : chartData_MONTH
+          : userRequestedChartDataBasedOnTime[2].active === true
+          ? chartData_MONTH
+          : userRequestedChartDataBasedOnTime[1].active === true
+          ? chartData_WEEK
+          : userRequestedChartDataBasedOnTime[0].active === true
+          ? chartData_DAY
+          : null
       "
       :options="options"
     />
@@ -66,9 +72,11 @@ import AlpacaData from "../services/AlpacaData";
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
 
-const MINUTE_IN_MILLISECONDS = 60000;
 const YEAR_IN_MILLISECONDS = 31556926000;
 const MONTH_IN_MILLISECONDS = 2592000000;
+const WEEK_IN_MILLISECONDS = 604800000;
+const DAY_IN_MILLISECONDS = 86400000;
+const MINUTE_IN_MILLISECONDS = 60000;
 
 // ChartJS
 import {
@@ -95,11 +103,25 @@ ChartJS.register(
 
 let chartData_YEAR = Array;
 let chartData_MONTH = Array;
+let chartData_WEEK = Array;
+let chartData_DAY = Array;
+
 let stockData_YEAR = ref([]);
 let stockData_MONTH = ref([]);
+let stockData_WEEK = ref([]);
+let stockData_DAY = ref([]);
+
+const amountOfBars_YEAR = [];
+const closingValueBars_YEAR = [];
 
 const amountOfBars_MONTH = [];
 const closingValueBars_MONTH = [];
+
+const amountOfBars_WEEK = [];
+const closingValueBars_WEEK = [];
+
+const amountOfBars_DAY = [];
+const closingValueBars_DAY = [];
 
 let stockInformation = reactive({});
 let stockNews = ref([]);
@@ -143,11 +165,6 @@ const props = defineProps({
 
 const options = {
   responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
 };
 
 onMounted(async () => {
@@ -171,6 +188,18 @@ onMounted(async () => {
     .toISOString()
     .slice(0, -5)}Z`;
 
+  let CURRENT_TIME_MINUS_1_WEEK_ISO = `${new Date(
+    new Date().getTime() - WEEK_IN_MILLISECONDS
+  )
+    .toISOString()
+    .slice(0, -5)}Z`;
+
+  let CURRENT_TIME_MINUS_1_DAY_ISO = `${new Date(
+    new Date().getTime() - DAY_IN_MILLISECONDS
+  )
+    .toISOString()
+    .slice(0, -5)}Z`;
+
   console.log(CURRENT_TIME_MINUS_1_YEAR_ISO);
 
   console.log("2022-01-01T0:00:00Z");
@@ -188,53 +217,51 @@ onMounted(async () => {
     CURRENT_TIME_MINUS_20_MIN_ISO,
     "1Day"
   );
+  stockData_WEEK = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_WEEK_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "59Min"
+  );
 
-  console.log(stockData_MONTH);
+  stockData_DAY = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_DAY_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "59Min"
+  );
 
-  stockData_MONTH.data.bars.forEach((bar) => {
+  stockData_YEAR.forEach((bar) => {
+    amountOfBars_YEAR.push("");
+    closingValueBars_YEAR.push(bar.c);
+  });
+
+  stockData_MONTH.forEach((bar) => {
     amountOfBars_MONTH.push("");
     closingValueBars_MONTH.push(bar.c);
   });
 
-  console.log(closingValueBars_MONTH);
-  console.log(amountOfBars_MONTH);
-  console.log([
-    stockData_YEAR.data.bars[0].c,
-    stockData_YEAR.data.bars[1].c,
-    stockData_YEAR.data.bars[2].c,
-    stockData_YEAR.data.bars[3].c,
-    stockData_YEAR.data.bars[4].c,
-    stockData_YEAR.data.bars[5].c,
-    stockData_YEAR.data.bars[6].c,
-    stockData_YEAR.data.bars[7].c,
-    stockData_YEAR.data.bars[8].c,
-    stockData_YEAR.data.bars[9].c,
-    stockData_YEAR.data.bars[10].c,
-    stockData_YEAR.data.bars[11].c,
-  ]);
+  stockData_WEEK.forEach((bar) => {
+    amountOfBars_WEEK.push("");
+    closingValueBars_WEEK.push(bar.c);
+  });
+
+  stockData_DAY.forEach((bar) => {
+    amountOfBars_DAY.push("");
+    closingValueBars_DAY.push(bar.c);
+  });
+
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
   stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
 
   chartData_YEAR = {
-    labels: ["", "", "", "", "", "", "", "", "", "", "", ""],
+    labels: amountOfBars_YEAR,
     datasets: [
       {
+        label: "1 Year",
         backgroundColor: "#344d67",
-        data: [
-          stockData_YEAR.data.bars[0].c,
-          stockData_YEAR.data.bars[1].c,
-          stockData_YEAR.data.bars[2].c,
-          stockData_YEAR.data.bars[3].c,
-          stockData_YEAR.data.bars[4].c,
-          stockData_YEAR.data.bars[5].c,
-          stockData_YEAR.data.bars[6].c,
-          stockData_YEAR.data.bars[7].c,
-          stockData_YEAR.data.bars[8].c,
-          stockData_YEAR.data.bars[9].c,
-          stockData_YEAR.data.bars[10].c,
-          stockData_YEAR.data.bars[11].c,
-        ],
+        data: closingValueBars_YEAR,
       },
     ],
   };
@@ -243,8 +270,31 @@ onMounted(async () => {
     labels: amountOfBars_MONTH,
     datasets: [
       {
+        label: "1 Month",
         backgroundColor: "#344d67",
         data: closingValueBars_MONTH,
+      },
+    ],
+  };
+
+  chartData_WEEK = {
+    labels: amountOfBars_WEEK,
+    datasets: [
+      {
+        label: "1 Week",
+        backgroundColor: "#344d67",
+        data: closingValueBars_WEEK,
+      },
+    ],
+  };
+
+  chartData_DAY = {
+    labels: amountOfBars_DAY,
+    datasets: [
+      {
+        label: "1 Day",
+        backgroundColor: "#344d67",
+        data: closingValueBars_DAY,
       },
     ],
   };
