@@ -97,6 +97,43 @@
         </div>
       </div>
     </div>
+    <div @click="showModal = true" class="buy-button-container">
+      <GeneralButton
+        color="#ffe1a1"
+        backgroundColor="#344d67"
+        content="Place order"
+        fsize="12px"
+        padding="10px"
+      />
+    </div>
+    <div class="modal-container" v-show="showModal">
+      <div class="modal">
+        <h5>{{ stockInformation.name }}</h5>
+        <div class="modal-content">
+          <p>Input the stock amount</p>
+          <div class="input">
+            <input type="text" v-model="amountOfStock" />
+          </div>
+          <p>
+            Total price:
+            <span v-show="!totalPurchasePriceLoader">{{
+              stockPriceTimesAmountOfStock
+            }}</span>
+            $
+          </p>
+          <div class="dynamic-purchase-information"></div>
+          <div class="modalButton">
+            <GeneralButton
+              content="Place order"
+              color="#ffe1a1"
+              backgroundColor="#344d67"
+              fsize="12px"
+              padding="10px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
     <ArticleSectionHeaderComponent />
     <div class="news-articles" v-for="article in stockNews" :key="article.id">
@@ -109,7 +146,8 @@
 </template>
 
 <script setup>
-import { onMounted, defineProps, ref, reactive } from "vue";
+import { onMounted, defineProps, ref, reactive, watch } from "vue";
+import GeneralButton from "../components/GeneralButton.vue";
 import AlpacaData from "../services/AlpacaData";
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
@@ -119,6 +157,8 @@ const MONTH_IN_MILLISECONDS = 2592000000;
 const WEEK_IN_MILLISECONDS = 604800000;
 const DAY_IN_MILLISECONDS = 86400000;
 const MINUTE_IN_MILLISECONDS = 60000;
+
+let showModal = ref(false);
 
 // ChartJS
 import {
@@ -156,6 +196,12 @@ let stockData_DAY = ref([]);
 let stockData_WHOLE_DAY = ref([]);
 
 let current_stock_related_date;
+
+let amountOfStock = ref(1);
+
+let stockPriceTimesAmountOfStock = ref();
+
+let totalPurchasePriceLoader = ref(false);
 
 const amountOfBars_YEAR = [];
 const closingValueBars_YEAR = [];
@@ -202,7 +248,6 @@ const setActiveData = (title) => {
   setTimeout(() => {
     areOptionButtonsDisabled.value = false;
   }, 1000);
-  console.log(userRequestedChartDataBasedOnTime);
 };
 const props = defineProps({
   symbol: {
@@ -236,9 +281,6 @@ const setCurrentStockRelatedDate = () => {
   } else {
     currentDay = (new Date(stockData_DAY[0].t).getDate() + 1).toString();
   }
-  console.log(currentYear);
-  console.log(currentMonth);
-  console.log(currentDay);
 
   current_stock_related_date = `${currentYear}-${currentMonth}-${currentDay}`;
 };
@@ -275,10 +317,6 @@ onMounted(async () => {
   )
     .toISOString()
     .slice(0, -5)}Z`;
-
-  console.log(CURRENT_TIME_MINUS_1_YEAR_ISO);
-
-  console.log("2022-01-01T0:00:00Z");
 
   stockData_YEAR = await AlpacaData.getStockInfo(
     props.symbol,
@@ -340,21 +378,23 @@ onMounted(async () => {
         stockData_DAY[0].c
     ) * 100;
 
-  console.log(percentual_difference_DAY);
-
-  console.log(stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c);
-
-  console.log(stockData_DAY[0].c);
-  console.log(stockData_DAY[stockData_DAY.length - 1].c);
-
-  console.log(stockData_DAY);
-  console.log(stockData_WHOLE_DAY);
-
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
   stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
 
   setCurrentStockRelatedDate();
+
+  stockPriceTimesAmountOfStock =
+    amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
+  watch(amountOfStock, () => {
+    totalPurchasePriceLoader.value = true;
+    console.log(amountOfStock.value);
+    stockPriceTimesAmountOfStock =
+      amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
+    totalPurchasePriceLoader.value = false;
+  });
+
+  console.log(1 * stockData_DAY[stockData_DAY.length - 1].c);
 
   chartData_YEAR = {
     labels: amountOfBars_YEAR,
@@ -499,5 +539,64 @@ onMounted(async () => {
 
 .positive-percentage {
   color: green;
+}
+
+.buy-button-container:hover {
+  cursor: pointer;
+}
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000071;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal {
+  background-color: white;
+  width: 300px;
+  padding: 10px;
+  padding-bottom: 40px;
+  padding-top: 40px;
+  border: 3px solid #344d67;
+  border-radius: 10px;
+}
+
+.modal h5 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.modal-content p {
+  font-size: 12px;
+}
+
+.input {
+  display: flex;
+  gap: 10px;
+}
+
+.input input {
+  width: 100%;
+}
+
+.muted-text {
+  color: #808080;
+}
+
+.modalButton:hover {
+  cursor: pointer;
 }
 </style>
