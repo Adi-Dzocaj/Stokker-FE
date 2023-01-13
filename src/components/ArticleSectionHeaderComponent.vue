@@ -1,6 +1,6 @@
 <template>
   <div class="article-section-header">
-    <h4>Stock News</h4>
+    <h4>News</h4>
   </div>
 </template>
 

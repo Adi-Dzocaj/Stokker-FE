@@ -58,15 +58,18 @@
     </div>
 
     <div class="purchase-related-data" v-if="stockData_DAY.length > 0">
-      <h4>Stock info</h4>
+      <div class="purchase-related-data-header">
+        <h4>Stock info</h4>
+        <h6>-{{ current_stock_related_date }}</h6>
+      </div>
       <div class="current-day-stock-data">
-        <div class="data-box">
-          <p class="data-box-title">Closed at</p>
-          <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
-        </div>
         <div class="data-box">
           <p class="data-box-title">Opened at</p>
           <p>{{ stockData_DAY[0].c }} $</p>
+        </div>
+        <div class="data-box">
+          <p class="data-box-title">Closed at</p>
+          <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
         </div>
         <div class="data-box">
           <p class="data-box-title">Lowest today</p>
@@ -81,13 +84,16 @@
           <p></p>
           <p class="data-box-title">Percentual movement</p>
           <p
+            class="positive-percentage"
             v-if="
               stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
             "
           >
             -{{ percentual_difference_DAY.toFixed(3) }} %
           </p>
-          <p v-else>{{ percentual_difference_DAY.toFixed(3) }} %</p>
+          <p class="negative-percentage" v-else>
+            +{{ percentual_difference_DAY.toFixed(3) }} %
+          </p>
         </div>
       </div>
     </div>
@@ -149,6 +155,8 @@ let stockData_DAY = ref([]);
 
 let stockData_WHOLE_DAY = ref([]);
 
+let current_stock_related_date;
+
 const amountOfBars_YEAR = [];
 const closingValueBars_YEAR = [];
 
@@ -205,6 +213,34 @@ const props = defineProps({
 
 const options = {
   responsive: true,
+};
+
+const setCurrentStockRelatedDate = () => {
+  let currentYear;
+  let currentMonth;
+  let currentDay;
+
+  currentYear = new Date(stockData_DAY[0].t).getFullYear();
+  if (new Date(stockData_DAY[0].t).getMonth() + 1 < 10) {
+    currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1)
+      .toString()
+      .padStart(2, 0);
+  } else {
+    currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1).toString();
+  }
+
+  if (new Date(stockData_DAY[0].t).getDate() + 1 < 10) {
+    currentDay = (new Date(stockData_DAY[0].t).getDate() + 1)
+      .toString()
+      .padStart(2, 0);
+  } else {
+    currentDay = (new Date(stockData_DAY[0].t).getDate() + 1).toString();
+  }
+  console.log(currentYear);
+  console.log(currentMonth);
+  console.log(currentDay);
+
+  current_stock_related_date = `${currentYear}-${currentMonth}-${currentDay}`;
 };
 
 onMounted(async () => {
@@ -318,6 +354,8 @@ onMounted(async () => {
 
   stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
 
+  setCurrentStockRelatedDate();
+
   chartData_YEAR = {
     labels: amountOfBars_YEAR,
     datasets: [
@@ -400,6 +438,7 @@ onMounted(async () => {
 
 .chart-options {
   display: flex;
+  margin-bottom: 20px;
 }
 
 .option {
@@ -415,6 +454,16 @@ onMounted(async () => {
   color: #ffe1a1;
 }
 
+.purchase-related-data-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.purchase-related-data-header h6 {
+  color: #808080;
+}
+
 .purchase-related-data h4 {
   display: inline;
   border-bottom: 1px solid lightgray;
@@ -422,7 +471,7 @@ onMounted(async () => {
 }
 
 .current-day-stock-data {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -442,5 +491,13 @@ onMounted(async () => {
   padding-bottom: 5px;
   margin-bottom: 5px;
   border-bottom: 1px solid lightgray;
+}
+
+.negative-percentage {
+  color: red;
+}
+
+.positive-percentage {
+  color: green;
 }
 </style>
