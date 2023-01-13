@@ -56,6 +56,42 @@
         1 year
       </button>
     </div>
+
+    <div class="purchase-related-data" v-if="stockData_DAY.length > 0">
+      <h4>Stock info</h4>
+      <div class="current-day-stock-data">
+        <div class="data-box">
+          <p class="data-box-title">Closed at</p>
+          <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
+        </div>
+        <div class="data-box">
+          <p class="data-box-title">Opened at</p>
+          <p>{{ stockData_DAY[0].c }} $</p>
+        </div>
+        <div class="data-box">
+          <p class="data-box-title">Lowest today</p>
+          <p>{{ stockData_WHOLE_DAY[0].l }} $</p>
+        </div>
+        <div class="data-box">
+          <p></p>
+          <p class="data-box-title">Highest today</p>
+          <p>{{ stockData_WHOLE_DAY[0].h }} $</p>
+        </div>
+        <div class="data-box">
+          <p></p>
+          <p class="data-box-title">Percentual movement</p>
+          <p
+            v-if="
+              stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
+            "
+          >
+            -{{ percentual_difference_DAY.toFixed(3) }} %
+          </p>
+          <p v-else>{{ percentual_difference_DAY.toFixed(3) }} %</p>
+        </div>
+      </div>
+    </div>
+
     <ArticleSectionHeaderComponent />
     <div class="news-articles" v-for="article in stockNews" :key="article.id">
       <ArticleComponent :content="article.headline" :location="article.url" />
@@ -111,6 +147,8 @@ let stockData_MONTH = ref([]);
 let stockData_WEEK = ref([]);
 let stockData_DAY = ref([]);
 
+let stockData_WHOLE_DAY = ref([]);
+
 const amountOfBars_YEAR = [];
 const closingValueBars_YEAR = [];
 
@@ -123,6 +161,8 @@ const closingValueBars_WEEK = [];
 const amountOfBars_DAY = [];
 const closingValueBars_DAY = [];
 
+let percentual_difference_DAY = Number;
+
 let stockInformation = reactive({});
 let stockNews = ref([]);
 let loading = ref(true);
@@ -130,10 +170,10 @@ let loading = ref(true);
 let areOptionButtonsDisabled = ref(false);
 
 let userRequestedChartDataBasedOnTime = reactive([
-  { title: "dayData", active: false },
+  { title: "dayData", active: true },
   { title: "weekData", active: false },
   { title: "monthData", active: false },
-  { title: "yearData", active: true },
+  { title: "yearData", active: false },
 ]);
 
 console.log(userRequestedChartDataBasedOnTime);
@@ -231,6 +271,13 @@ onMounted(async () => {
     "59Min"
   );
 
+  stockData_WHOLE_DAY = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_DAY_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "1Day"
+  );
+
   stockData_YEAR.forEach((bar) => {
     amountOfBars_YEAR.push("");
     closingValueBars_YEAR.push(bar.c);
@@ -251,6 +298,22 @@ onMounted(async () => {
     closingValueBars_DAY.push(bar.c);
   });
 
+  percentual_difference_DAY =
+    Math.abs(
+      (stockData_DAY[0].c - stockData_DAY[stockData_DAY.length - 1].c) /
+        stockData_DAY[0].c
+    ) * 100;
+
+  console.log(percentual_difference_DAY);
+
+  console.log(stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c);
+
+  console.log(stockData_DAY[0].c);
+  console.log(stockData_DAY[stockData_DAY.length - 1].c);
+
+  console.log(stockData_DAY);
+  console.log(stockData_WHOLE_DAY);
+
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
   stockNews = await AlpacaData.getSingleNewsArticle(props.symbol);
@@ -259,8 +322,8 @@ onMounted(async () => {
     labels: amountOfBars_YEAR,
     datasets: [
       {
-        label: "1 Year",
-        backgroundColor: "#344d67",
+        label: "1 YEAR",
+        backgroundColor: "black",
         data: closingValueBars_YEAR,
       },
     ],
@@ -270,8 +333,8 @@ onMounted(async () => {
     labels: amountOfBars_MONTH,
     datasets: [
       {
-        label: "1 Month",
-        backgroundColor: "#344d67",
+        label: "1 MONTH",
+        backgroundColor: "black",
         data: closingValueBars_MONTH,
       },
     ],
@@ -281,8 +344,8 @@ onMounted(async () => {
     labels: amountOfBars_WEEK,
     datasets: [
       {
-        label: "1 Week",
-        backgroundColor: "#344d67",
+        label: "1 WEEK",
+        backgroundColor: "black",
         data: closingValueBars_WEEK,
       },
     ],
@@ -292,8 +355,8 @@ onMounted(async () => {
     labels: amountOfBars_DAY,
     datasets: [
       {
-        label: "1 Day",
-        backgroundColor: "#344d67",
+        label: "1 DAY",
+        backgroundColor: "black",
         data: closingValueBars_DAY,
       },
     ],
@@ -307,7 +370,7 @@ onMounted(async () => {
 .stock-information {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   margin: 20px;
 }
 
@@ -350,5 +413,34 @@ onMounted(async () => {
 .option:hover {
   background-color: #344d67;
   color: #ffe1a1;
+}
+
+.purchase-related-data h4 {
+  display: inline;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 5px;
+}
+
+.current-day-stock-data {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.data-box {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  flex-grow: 1;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.data-box-title {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid lightgray;
 }
 </style>
