@@ -26,9 +26,16 @@ const updateAccount = async (user, funds) => {
     return response
 }
 
+const postInvestment = async (user, investmentdetails) => {
+    const response = await axios.post(`${BASE_URL}/Investment?id=${user}`, investmentdetails)
+    console.log(response)
+    return response
+}
+
 export default {
     postUser,
     getUsers,
     updateAccount,
-    getSpecificUser
+    getSpecificUser,
+    postInvestment
   };

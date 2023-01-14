@@ -84,14 +84,14 @@
           <p></p>
           <p class="data-box-title">Percentual movement</p>
           <p
-            class="positive-percentage"
+            class="negative-percentage"
             v-if="
               stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
             "
           >
             -{{ percentual_difference_DAY.toFixed(3) }} %
           </p>
-          <p class="negative-percentage" v-else>
+          <p class="positive-percentage" v-else>
             +{{ percentual_difference_DAY.toFixed(3) }} %
           </p>
         </div>
@@ -122,7 +122,7 @@
             $
           </p>
           <div class="dynamic-purchase-information"></div>
-          <div class="modalButton">
+          <div class="modalButton" @click="addInvestmentToUser()">
             <GeneralButton
               content="Place order"
               color="#ffe1a1"
@@ -148,6 +148,7 @@
 <script setup>
 import { onMounted, defineProps, ref, reactive, watch } from "vue";
 import GeneralButton from "../components/GeneralButton.vue";
+import ApiData from "../services/ApiData";
 import AlpacaData from "../services/AlpacaData";
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
@@ -172,6 +173,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "vue-chartjs";
+import { getAuth } from "@firebase/auth";
 
 ChartJS.register(
   CategoryScale,
@@ -230,8 +232,6 @@ let userRequestedChartDataBasedOnTime = reactive([
   { title: "yearData", active: false },
 ]);
 
-console.log(userRequestedChartDataBasedOnTime);
-
 const setActiveData = (title) => {
   areOptionButtonsDisabled.value = true;
   console.log(areOptionButtonsDisabled);
@@ -284,6 +284,25 @@ const setCurrentStockRelatedDate = () => {
 
   current_stock_related_date = `${currentYear}-${currentMonth}-${currentDay}`;
 };
+
+const addInvestmentToUser = async () => {
+  let investmentDetails = {
+    Title: stockInformation.name,
+    StockTicker: stockInformation.symbol,
+    BuyPrice: stockData_DAY[stockData_DAY.length - 1].c,
+    PurchasedAt: `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
+      .toISOString()
+      .slice(0, -5)}Z`,
+  };
+
+  const response = await ApiData.postInvestment(
+    getAuth().currentUser.uid,
+    investmentDetails
+  );
+  console.log(response);
+};
+
+console.log(new Date());
 
 onMounted(async () => {
   loading.value = true;
@@ -384,6 +403,12 @@ onMounted(async () => {
 
   setCurrentStockRelatedDate();
 
+  console.log(
+    `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
+      .toISOString()
+      .slice(0, -5)}Z`
+  );
+
   stockPriceTimesAmountOfStock =
     amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
   watch(amountOfStock, () => {
@@ -393,8 +418,6 @@ onMounted(async () => {
       amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
     totalPurchasePriceLoader.value = false;
   });
-
-  console.log(1 * stockData_DAY[stockData_DAY.length - 1].c);
 
   chartData_YEAR = {
     labels: amountOfBars_YEAR,
