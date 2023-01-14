@@ -1,12 +1,19 @@
 <template>
-  <div class="button">
+  <button :disabled="disabled" class="button">
     {{ content }}
-  </div>
+  </button>
 </template>
 
 <script setup>
 import { defineProps } from "vue";
-defineProps(["color", "backgroundColor", "content", "fsize", "padding"]);
+defineProps([
+  "color",
+  "backgroundColor",
+  "content",
+  "fsize",
+  "padding",
+  "disabled",
+]);
 </script>
 
 <style scoped>
@@ -21,5 +28,14 @@ defineProps(["color", "backgroundColor", "content", "fsize", "padding"]);
   font-weight: bold;
   font-style: italic;
   color: v-bind(color);
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.9;
+  cursor: not-allowed;
 }
 </style>

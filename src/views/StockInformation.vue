@@ -86,7 +86,7 @@
           <p></p>
           <p class="data-box-title">Percentual movement</p>
           <p
-            class="negative-percentage"
+            class="negative-result"
             v-if="
               stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
             "
@@ -106,6 +106,7 @@
         content="Place order"
         fsize="12px"
         padding="10px"
+        :key="toggleToReRenderGeneralButton"
       />
     </div>
     <div class="modal-container" v-show="showModal">
@@ -124,9 +125,16 @@
             $
           </p>
           <p>Account funds after purchase: {{ accountStore.unusedFunds }}</p>
+          <p
+            v-if="isPurchaseValueHigherThanUnusedFunds"
+            class="negative-result"
+          >
+            {{ cantMakePurchase }}
+          </p>
           <div class="dynamic-purchase-information"></div>
           <div class="modalButton" @click="addInvestmentToUser()">
             <GeneralButton
+              :disabled="isPurchaseValueHigherThanUnusedFunds"
               content="Place order"
               color="#ffe1a1"
               backgroundColor="#344d67"
@@ -210,6 +218,11 @@ let current_stock_related_date;
 let amountOfStock = ref(1);
 
 let stockPriceTimesAmountOfStock = ref();
+
+let toggleToReRenderGeneralButton = ref(false);
+
+let isPurchaseValueHigherThanUnusedFunds = ref();
+let cantMakePurchase = "Unsufficient amount of funds.";
 
 let totalPurchasePriceLoader = ref(false);
 
@@ -297,16 +310,21 @@ const addInvestmentToUser = async () => {
   let investmentDetails = {
     Title: stockInformation.name,
     StockTicker: stockInformation.symbol,
+    AmountOfStocks: amountOfStock.value,
     BuyPrice: stockData_DAY[stockData_DAY.length - 1].c,
     PurchasedAt: `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
       .toISOString()
       .slice(0, -5)}Z`,
   };
 
+  console.log(amountOfStock);
+  console.log(amountOfStock.value);
+
   const response = await ApiData.postInvestment(
     getAuth().currentUser.uid,
     investmentDetails
   );
+
   console.log(response);
 };
 
@@ -420,6 +438,14 @@ onMounted(async () => {
     stockPriceTimesAmountOfStock = (
       amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c
     ).toFixed(3);
+    if (stockPriceTimesAmountOfStock > accountStore.unusedFunds) {
+      isPurchaseValueHigherThanUnusedFunds = true;
+    } else {
+      isPurchaseValueHigherThanUnusedFunds = false;
+    }
+
+    toggleToReRenderGeneralButton.value = !toggleToReRenderGeneralButton.value;
+    console.log(isPurchaseValueHigherThanUnusedFunds.value);
     console.log(stockPriceTimesAmountOfStock);
     totalPurchasePriceLoader.value = false;
   });
@@ -565,7 +591,7 @@ onMounted(async () => {
   border-bottom: 1px solid lightgray;
 }
 
-.negative-percentage {
+.negative-result {
   color: red;
 }
 
