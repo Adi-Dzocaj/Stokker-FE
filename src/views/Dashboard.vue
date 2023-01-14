@@ -6,8 +6,8 @@
       v-show="showModal"
       buttonContent="Save"
     />
-    <div class="account-balance-container">
-      <AccountBalance />
+    <div class="financials-container">
+      <FinancialsComponent />
     </div>
     <router-link to="/stockpanel">stockpanel</router-link>
   </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import AccountBalance from "../components/AccountBalanceComponent.vue";
+import FinancialsComponent from "../components/FinancialsComponent.vue";
 import ModalComponent from "../components/ModalComponent.vue";
 import { ref, onMounted } from "vue";
 import ApiData from "../services/ApiData";
@@ -42,7 +42,7 @@ const startingCapitalAmount = ref(null);
 
 const userStore = useUserStore();
 
-userStore.getUserFromDbAndSetAccountBalanceState();
+userStore.getUserFromDbAndSetFinancials();
 
 const updateBalanceAndCloseModal = async () => {
   console.log(getAuth().currentUser.uid);
@@ -53,7 +53,7 @@ const updateBalanceAndCloseModal = async () => {
     unusedFunds: startingCapitalAmount.value.modalAccountBalanceInput,
   });
 
-  userStore.getUserFromDbAndSetAccountBalanceState();
+  userStore.getUserFromDbAndSetFinancials();
 
   showModal.value = false;
 };
@@ -64,9 +64,9 @@ const updateBalanceAndCloseModal = async () => {
   margin: 20px;
 }
 
-.account-balance-container {
+.financials-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   width: 100%;
 }
 </style>

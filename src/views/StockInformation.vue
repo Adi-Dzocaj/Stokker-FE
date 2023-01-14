@@ -123,6 +123,7 @@
             }}</span>
             $
           </p>
+          <p>Account funds after purchase: {{ accountStore.unusedFunds }}</p>
           <div class="dynamic-purchase-information"></div>
           <div class="modalButton" @click="addInvestmentToUser()">
             <GeneralButton
@@ -154,6 +155,11 @@ import ApiData from "../services/ApiData";
 import AlpacaData from "../services/AlpacaData";
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
+import { useAccountStore } from "../store/accountStore";
+import { useUserStore } from "../store/userStore";
+
+const accountStore = useAccountStore();
+const userStore = useUserStore();
 
 const YEAR_IN_MILLISECONDS = 31556926000;
 const MONTH_IN_MILLISECONDS = 2592000000;
@@ -406,14 +412,19 @@ onMounted(async () => {
   setCurrentStockRelatedDate();
 
   stockPriceTimesAmountOfStock =
-    amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
+    amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c.toFixed(3);
+
   watch(amountOfStock, () => {
     totalPurchasePriceLoader.value = true;
     console.log(amountOfStock.value);
-    stockPriceTimesAmountOfStock =
-      amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
+    stockPriceTimesAmountOfStock = (
+      amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c
+    ).toFixed(3);
+    console.log(stockPriceTimesAmountOfStock);
     totalPurchasePriceLoader.value = false;
   });
+
+  userStore.getUserFromDbAndSetFinancials();
 
   console.log(stockData_WHOLE_DAY);
 

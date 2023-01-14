@@ -2,7 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { defineStore } from 'pinia';
 import { getAuth, signOut } from 'firebase/auth';
 import ApiData from '../services/ApiData';
-import { useGlobalStore } from '../store/globalStore'
+import { useAccountStore } from '../store/accountStore'
 
 
 export const useUserStore = defineStore('userStore', {
@@ -35,11 +35,11 @@ export const useUserStore = defineStore('userStore', {
       this.user = null;
       console.log(this.user);
     },
-    async getUserFromDbAndSetAccountBalanceState() {
+    async getUserFromDbAndSetFinancials() {
       const response = await ApiData.getSpecificUser(getAuth().currentUser.uid);
-      useGlobalStore().accountBalance = response.data.account.accountBalance
-      console.log(response.data.account.accountBalance)
-      console.log(response)
+      useAccountStore().accountBalance = response.data.account.accountBalance
+      useAccountStore().unusedFunds = response.data.account.unusedFunds
+      // console.log(response)
       return
     }
   },

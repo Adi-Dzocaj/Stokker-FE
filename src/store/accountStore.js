@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useGlobalStore = defineStore("global", () => {
+export const useAccountStore = defineStore("account", () => {
   const accountBalance = ref({accountBalance: null})
+  const unusedFunds = ref({unusedFunds: null})
 
     return {
-        accountBalance
+        accountBalance,
+        unusedFunds
     };
   });
