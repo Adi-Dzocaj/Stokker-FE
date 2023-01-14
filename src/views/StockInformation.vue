@@ -73,12 +73,14 @@
         </div>
         <div class="data-box">
           <p class="data-box-title">Lowest today</p>
-          <p>{{ stockData_WHOLE_DAY[0].l }} $</p>
+          <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].l }} $</p>
+          <p v-else>Market is closed</p>
         </div>
         <div class="data-box">
           <p></p>
           <p class="data-box-title">Highest today</p>
-          <p>{{ stockData_WHOLE_DAY[0].h }} $</p>
+          <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].h }} $</p>
+          <p v-else>Market is closed</p>
         </div>
         <div class="data-box">
           <p></p>
@@ -403,12 +405,6 @@ onMounted(async () => {
 
   setCurrentStockRelatedDate();
 
-  console.log(
-    `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
-      .toISOString()
-      .slice(0, -5)}Z`
-  );
-
   stockPriceTimesAmountOfStock =
     amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
   watch(amountOfStock, () => {
@@ -418,6 +414,8 @@ onMounted(async () => {
       amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c;
     totalPurchasePriceLoader.value = false;
   });
+
+  console.log(stockData_WHOLE_DAY);
 
   chartData_YEAR = {
     labels: amountOfBars_YEAR,
