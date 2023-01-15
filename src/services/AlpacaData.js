@@ -32,7 +32,19 @@ const getSingleStock = async (symbol) => {
 const getStockInfo = async (symbol, start, end, timeframe) => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/${symbol}/bars?start=${start}&end=${end}&timeframe=${timeframe}`, HEADERS)
     console.log(response)
-    return response.data.bars
+    return response.data
+}
+
+const getLatestStockInfo = async (symbol) => {
+    const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/${symbol}/bars/latest`, HEADERS)
+    return response.data.bar.c
+
+}
+
+const getMultipleStocksInfo = async (symbols) => {
+    const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/bars/latest?symbols=${symbols}`, HEADERS)
+    // console.log(response)
+    return response
 }
 
 export default {
@@ -41,4 +53,6 @@ export default {
     getStocks,
     getStockInfo,
     getSingleStock,
+    getMultipleStocksInfo,
+    getLatestStockInfo
   };

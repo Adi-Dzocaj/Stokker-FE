@@ -10,7 +10,15 @@
     </div>
 
     <div class="data-piece">
-      <h6>Amount: {{ currentPrice }}</h6>
+      <h6>Current Price: {{ currentPrice }}</h6>
+    </div>
+
+    <div class="data-piece">
+      <h6>Amount: {{ amount }}</h6>
+    </div>
+
+    <div class="data-piece">
+      <h6>Total value: {{ totalValue }}</h6>
     </div>
 
     <div class="data-piece">
@@ -24,6 +32,8 @@ import { defineProps } from "vue";
 
 defineProps([
   "title",
+  "amount",
+  "totalValue",
   "symbol",
   "buyPrice",
   "currentPrice",
