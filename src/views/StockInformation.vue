@@ -172,6 +172,10 @@ import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderCom
 import { useAccountStore } from "../store/accountStore";
 import { useUserStore } from "../store/userStore";
 import "clickout-event";
+import { useToast } from "vue-toastification";
+import router from "/src/router/index.js";
+
+const toast = useToast();
 
 const accountStore = useAccountStore();
 const userStore = useUserStore();
@@ -324,7 +328,7 @@ const addInvestmentToUser = async () => {
     Title: stockInformation.name,
     StockTicker: stockInformation.symbol,
     AmountOfStocks: amountOfStock.value,
-    BuyPrice: stockData_DAY[stockData_DAY.length - 1].c,
+    BuyPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
     PurchasedAt: `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
       .toISOString()
       .slice(0, -5)}Z`,
@@ -334,6 +338,15 @@ const addInvestmentToUser = async () => {
     getAuth().currentUser.uid,
     investmentDetails
   );
+  userStore.getUserFromDbAndSetFinancials();
+  toast.success(
+    `Purchase of ${amountOfStock.value} ${stockInformation.symbol} complete!`
+  );
+  setTimeout(() => {
+    toast.success(`Your new account balance: ${accountStore.unusedFunds} $`);
+  }, 5000);
+
+  router.push("/dashboard");
 };
 
 onMounted(async () => {
@@ -438,20 +451,17 @@ onMounted(async () => {
 
   setCurrentStockRelatedDate();
 
-  if (stockData_DAY) {
-    stockPriceTimesAmountOfStock =
-      amountOfStock.value *
-      stockData_DAY[stockData_DAY.length - 1].c.toFixed(3);
-  }
+  stockPriceTimesAmountOfStock =
+    amountOfStock.value *
+    stockData_WEEK[stockData_WEEK.length - 1].c.toFixed(3);
 
   watch(amountOfStock, () => {
     totalPurchasePriceLoader.value = true;
     console.log(amountOfStock.value);
-    if (stockData_DAY) {
-      stockPriceTimesAmountOfStock = (
-        amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c
-      ).toFixed(3);
-    }
+
+    stockPriceTimesAmountOfStock = (
+      amountOfStock.value * stockData_WEEK[stockData_WEEK.length - 1].c
+    ).toFixed(3);
 
     if (stockPriceTimesAmountOfStock > accountStore.unusedFunds) {
       isPurchaseValueHigherThanUnusedFunds = true;
@@ -460,8 +470,7 @@ onMounted(async () => {
     }
 
     toggleToReRenderGeneralButton.value = !toggleToReRenderGeneralButton.value;
-    console.log(isPurchaseValueHigherThanUnusedFunds.value);
-    console.log(stockPriceTimesAmountOfStock);
+
     totalPurchasePriceLoader.value = false;
   });
 
