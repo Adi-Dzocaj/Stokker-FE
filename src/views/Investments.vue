@@ -1,5 +1,5 @@
 <template>
-  <div class="investments">
+  <div class="investments" v-if="!loading">
     <InvestmentComponent
       v-for="investment in accountDetails.data.investments"
       :key="investment.id"
@@ -10,20 +10,23 @@
       percentualIncrease="10%"
     />
   </div>
+  <div v-else>Loading...</div>
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { getAuth } from "firebase/auth";
 import ApiData from "../services/ApiData";
 import InvestmentComponent from "../components/InvestmentComponent.vue";
 
 let accountDetails = ref();
+let loading = ref(true);
 
-onBeforeMount(async () => {
-  const response = await ApiData.getSpecificAccount(getAuth().currentUser.uid);
-  accountDetails = response;
-  console.log(accountDetails);
+onMounted(async () => {
+  loading.value = true;
+  accountDetails = await ApiData.getSpecificAccount(getAuth().currentUser.uid);
+  console.log(accountDetails.data.investments);
+  loading.value = false;
 });
 </script>
 
