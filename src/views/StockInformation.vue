@@ -57,7 +57,10 @@
       </button>
     </div>
 
-    <div class="purchase-related-data" v-if="stockData_DAY.length > 0">
+    <div
+      class="purchase-related-data"
+      v-if="stockData_DAY && stockData_DAY.length > 0"
+    >
       <div class="purchase-related-data-header">
         <h4>Stock info</h4>
         <h6>-{{ current_stock_related_date }}</h6>
@@ -99,6 +102,9 @@
         </div>
       </div>
     </div>
+    <div class="market-closed-announcement" v-else>
+      - Market is closed today -
+    </div>
     <div @click="showModal = true" class="buy-button-container">
       <GeneralButton
         color="#ffe1a1"
@@ -110,7 +116,7 @@
       />
     </div>
     <div class="modal-container" v-show="showModal">
-      <div class="modal">
+      <div class="modal" v-on:clickout="showModal = false">
         <h5>{{ stockInformation.name }}</h5>
         <div class="modal-content">
           <p>Input the stock amount</p>
@@ -165,6 +171,7 @@ import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
 import { useAccountStore } from "../store/accountStore";
 import { useUserStore } from "../store/userStore";
+import "clickout-event";
 
 const accountStore = useAccountStore();
 const userStore = useUserStore();
@@ -286,20 +293,26 @@ const setCurrentStockRelatedDate = () => {
   let currentMonth;
   let currentDay;
 
-  currentYear = new Date(stockData_DAY[0].t).getFullYear();
-  if (new Date(stockData_DAY[0].t).getMonth() + 1 < 10) {
+  if (stockData_DAY) {
+    currentYear = new Date(stockData_DAY[0].t).getFullYear();
+  }
+
+  if (stockData_DAY && new Date(stockData_DAY[0].t).getMonth() + 1 < 10) {
     currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1)
       .toString()
       .padStart(2, 0);
-  } else {
+  } else if (
+    stockData_DAY &&
+    new Date(stockData_DAY[0].t).getMonth() + 1 > 10
+  ) {
     currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1).toString();
   }
 
-  if (new Date(stockData_DAY[0].t).getDate() + 1 < 10) {
+  if (stockData_DAY && new Date(stockData_DAY[0].t).getDate() + 1 < 10) {
     currentDay = (new Date(stockData_DAY[0].t).getDate() + 1)
       .toString()
       .padStart(2, 0);
-  } else {
+  } else if (stockData_DAY && new Date(stockData_DAY[0].t).getDate() + 1 > 10) {
     currentDay = (new Date(stockData_DAY[0].t).getDate() + 1).toString();
   }
 
@@ -317,18 +330,11 @@ const addInvestmentToUser = async () => {
       .slice(0, -5)}Z`,
   };
 
-  console.log(amountOfStock);
-  console.log(amountOfStock.value);
-
   const response = await ApiData.postInvestment(
     getAuth().currentUser.uid,
     investmentDetails
   );
-
-  console.log(response);
 };
-
-console.log(new Date());
 
 onMounted(async () => {
   loading.value = true;
@@ -411,17 +417,20 @@ onMounted(async () => {
     amountOfBars_WEEK.push("");
     closingValueBars_WEEK.push(bar.c);
   });
+  if (stockData_DAY) {
+    stockData_DAY.forEach((bar) => {
+      amountOfBars_DAY.push("");
+      closingValueBars_DAY.push(bar.c);
+    });
+  }
 
-  stockData_DAY.forEach((bar) => {
-    amountOfBars_DAY.push("");
-    closingValueBars_DAY.push(bar.c);
-  });
-
-  percentual_difference_DAY =
-    Math.abs(
-      (stockData_DAY[0].c - stockData_DAY[stockData_DAY.length - 1].c) /
-        stockData_DAY[0].c
-    ) * 100;
+  if (stockData_DAY) {
+    percentual_difference_DAY =
+      Math.abs(
+        (stockData_DAY[0].c - stockData_DAY[stockData_DAY.length - 1].c) /
+          stockData_DAY[0].c
+      ) * 100;
+  }
 
   stockInformation = await AlpacaData.getSingleStock(props.symbol);
 
@@ -429,15 +438,21 @@ onMounted(async () => {
 
   setCurrentStockRelatedDate();
 
-  stockPriceTimesAmountOfStock =
-    amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c.toFixed(3);
+  if (stockData_DAY) {
+    stockPriceTimesAmountOfStock =
+      amountOfStock.value *
+      stockData_DAY[stockData_DAY.length - 1].c.toFixed(3);
+  }
 
   watch(amountOfStock, () => {
     totalPurchasePriceLoader.value = true;
     console.log(amountOfStock.value);
-    stockPriceTimesAmountOfStock = (
-      amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c
-    ).toFixed(3);
+    if (stockData_DAY) {
+      stockPriceTimesAmountOfStock = (
+        amountOfStock.value * stockData_DAY[stockData_DAY.length - 1].c
+      ).toFixed(3);
+    }
+
     if (stockPriceTimesAmountOfStock > accountStore.unusedFunds) {
       isPurchaseValueHigherThanUnusedFunds = true;
     } else {
@@ -451,8 +466,6 @@ onMounted(async () => {
   });
 
   userStore.getUserFromDbAndSetFinancials();
-
-  console.log(stockData_WHOLE_DAY);
 
   chartData_YEAR = {
     labels: amountOfBars_YEAR,
@@ -656,5 +669,9 @@ onMounted(async () => {
 
 .modalButton:hover {
   cursor: pointer;
+}
+
+.market-closed-announcement {
+  text-align: center;
 }
 </style>
