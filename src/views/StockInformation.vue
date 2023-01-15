@@ -343,7 +343,7 @@ const addInvestmentToUser = async () => {
     `Purchase of ${amountOfStock.value} ${stockInformation.symbol} complete!`
   );
   setTimeout(() => {
-    toast.success(`Your new account balance: ${accountStore.unusedFunds} $`);
+    toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
   }, 5000);
 
   router.push("/dashboard");

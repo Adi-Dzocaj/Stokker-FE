@@ -9,6 +9,7 @@
     <div class="financials-container">
       <FinancialsComponent />
     </div>
+
     <router-link to="/stockpanel">stockpanel</router-link>
   </div>
   <div v-else>Loading...</div>
@@ -21,9 +22,12 @@ import { ref, onMounted } from "vue";
 import ApiData from "../services/ApiData";
 import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
+import { useAccountStore } from "../store/accountStore";
 
 let showModal = ref(Boolean);
 let loading = ref(true);
+
+let areInvestmentsLoaded = ref(false);
 
 onMounted(async () => {
   loading.value = true;
@@ -35,6 +39,9 @@ onMounted(async () => {
   } else {
     showModal.value = true;
   }
+
+  await accountStore.getUserAccountAndSetInvestments();
+  console.log(accountStore.investments);
   loading.value = false;
 });
 
@@ -43,6 +50,8 @@ const startingCapitalAmount = ref(null);
 const userStore = useUserStore();
 
 userStore.getUserFromDbAndSetFinancials();
+
+const accountStore = useAccountStore();
 
 const updateBalanceAndCloseModal = async () => {
   console.log(getAuth().currentUser.uid);
@@ -62,11 +71,5 @@ const updateBalanceAndCloseModal = async () => {
 <style scoped>
 .dashboard {
   margin: 20px;
-}
-
-.financials-container {
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
 }
 </style>

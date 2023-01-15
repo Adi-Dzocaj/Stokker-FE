@@ -20,6 +20,13 @@ const getSpecificUser = async (user) => {
     return response
 }
 
+const getSpecificAccount = async (user) => {
+    const response = await axios.get(`${BASE_URL}/Account/${user}`)
+    console.log(response)
+    console.log(response.data.investments)
+    return response
+}
+
 const updateAccount = async (user, funds) => {
     const response = await axios.put(`${BASE_URL}/Account/${user}`, funds)
     console.log(response)
@@ -37,5 +44,6 @@ export default {
     getUsers,
     updateAccount,
     getSpecificUser,
-    postInvestment
+    postInvestment,
+    getSpecificAccount
   };

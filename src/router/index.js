@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Stockpanel from '../views/Stockpanel.vue'
 import StockInformation from '../views/StockInformation.vue'
+import Investments from '../views/Investments.vue'
 
 import {
 	getAuth,
@@ -41,6 +42,14 @@ const routes = [
 		name: 'StockInformation',
 		component: StockInformation,
 		props: true,
+		meta: {
+			requiresAuth: true
+		}
+	},
+	{
+		path: '/investments',
+		name: 'Investments',
+		component: Investments,
 		meta: {
 			requiresAuth: true
 		}

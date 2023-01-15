@@ -5,6 +5,11 @@ import { createPinia } from 'pinia';
 
 import router from '/src/router/index.js';
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js'
+
 // FontAwesome
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGoogle, faGithub, faFacebook } from "@fortawesome/free-brands-svg-icons";
@@ -29,4 +34,4 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-createApp(App).use(router).use(Toast).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
+createApp(App).use(router).use(Toast).use(bootstrap).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
