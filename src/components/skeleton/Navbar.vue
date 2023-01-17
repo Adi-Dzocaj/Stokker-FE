@@ -1,8 +1,14 @@
 <template>
   <div class="nav-container">
     <div class="nav-menu">
-      <router-link to="/investments" class="nav-item">
+      <router-link @click="closeMenu()" to="/investments" class="nav-item">
         <span class="nav-link">Investments</span>
+      </router-link>
+      <router-link @click="closeMenu()" to="/dashboard" class="nav-item">
+        <span class="nav-link">Dashboard</span>
+      </router-link>
+      <router-link @click="closeMenu()" to="/stockpanel" class="nav-item">
+        <span class="nav-link">Stockpanel</span>
       </router-link>
     </div>
     <div class="hamburger" @click="toggleMenuActivation()">
@@ -62,6 +68,11 @@ const toggleMenuActivation = () => {
     hamburger[0].classList.add("active");
     navMenu[0].classList.add("active");
   }
+};
+
+const closeMenu = () => {
+  hamburger[0].classList.remove("active");
+  navMenu[0].classList.remove("active");
 };
 </script>
 
@@ -125,10 +136,6 @@ a {
   color: black;
 }
 
-.nav-link:hover {
-  color: #ffe1a1;
-}
-
 .bar {
   display: block;
   width: 25px;
@@ -160,7 +167,7 @@ a {
   position: fixed;
   left: -100%;
   top: 10vh;
-  gap: 0;
+  gap: 10px;
   display: flex;
   flex-direction: column;
   background-color: #ffe1a1;
@@ -189,6 +196,7 @@ a {
   }
 
   .nav-menu {
+    flex-direction: row;
     position: initial;
     width: 33%;
     padding: initial;
@@ -198,11 +206,18 @@ a {
 
   .nav-link {
     color: #ffe1a1;
+    font-size: 16px;
     background-color: #344d67;
   }
 
   .nav-item {
     border-bottom: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-link {
+    font-size: 20px;
   }
 }
 </style>

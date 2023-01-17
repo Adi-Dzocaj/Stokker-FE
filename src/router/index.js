@@ -90,7 +90,7 @@ router.beforeEach(async (to, from, next) => {
 		if (await getCurrentUser()) {
 			next();
 		} else {
-			toast("Log in to access your dashboard")
+			toast("Log in to access the menu")
 			next("/login")
 		}
 	} else {
