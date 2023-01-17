@@ -9,10 +9,8 @@ export const useAccountStore = defineStore("account", () => {
   const investments = ref()
 
   const getUserAccountAndSetInvestments = async () => {
-    const response = await ApiData.getSpecificAccount(getAuth().currentUser.uid);
-    console.log(response.data.investments)
-    investments.value = response.data.investments
-    console.log(investments.value)
+    const response = await ApiData.getSpecificAccountInvestments(getAuth().currentUser.uid);
+    investments.value = response
   }
     return {
         accountBalance,

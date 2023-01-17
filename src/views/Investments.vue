@@ -1,12 +1,16 @@
 <template>
-  <div
-    class="investments-panel"
-    v-if="!loading && accountDetails.data.investments"
-  >
-    <div
-      v-for="(investment, index) in accountDetails.data.investments"
-      :key="investment.id"
-    >
+  <div class="investments-panel" v-if="!loading && accountDetails">
+    <div v-if="accountDetails.length === 0">
+      <h4 class="portfolio-empty-header">Your portfolio is empty.</h4>
+      <h5>
+        Head over to the
+        <router-link class="stockpanel-link" to="/stockpanel"
+          >Stockpanel</router-link
+        >, search for a stock, and invest!
+      </h5>
+    </div>
+    <h4 v-show="accountDetails.length > 0">Your investments</h4>
+    <div v-for="(investment, index) in accountDetails" :key="investment.id">
       <div @click="setClickedInvestmentIndex(index)">
         <InvestmentComponent
           :title="investment.title"
@@ -20,55 +24,54 @@
         />
       </div>
     </div>
-    <div class="modal-container" v-show="globalStore.showModal">
-      <div class="modal">
-        <h5>
-          {{ accountDetails.data.investments[clickedInvestment].title }}
-        </h5>
-        <div class="modal-content">
-          <p>
-            You currently own
-            {{
-              accountDetails.data.investments[clickedInvestment].amountOfStocks
-            }}
-            "{{
-              accountDetails.data.investments[clickedInvestment].stockTicker
-            }}" stock at
-            {{
-              accountDetails.data.investments[clickedInvestment].currentPrice
-            }}
-            $ each.
-          </p>
-          <p>Input the amount of stocks you wish to sell</p>
-          <div class="input">
-            <input type="text" v-model="amountOfStock" />
-          </div>
-          <p>
-            Total price:
-            <span v-show="!totalPurchasePriceLoader">{{
-              stockPriceTimesAmountOfStock.toFixed(3)
-            }}</span>
-            $
-          </p>
-          <p>
-            Account funds after purchase:
-            {{ accountStore.unusedFunds + stockPriceTimesAmountOfStock }}
-            $
-          </p>
-          <p v-if="isRequestedSaleAmountTooHigh" class="negative-result">
-            You dont own that many "{{
-              accountDetails.data.investments[clickedInvestment].stockTicker
-            }}" stock
-          </p>
-          <div class="modalButton">
-            <GeneralButton
-              :disabled="isRequestedSaleAmountTooHigh"
-              content="Sell stock"
-              color="#ffe1a1"
-              backgroundColor="#344d67"
-              fsize="12px"
-              padding="10px"
-            />
+    <div v-if="accountDetails.length > 0">
+      <div class="modal-container" v-show="globalStore.showModal">
+        <div class="modal">
+          <h5>
+            {{ accountDetails[clickedInvestment].title }}
+          </h5>
+          <div class="modal-content">
+            <p>
+              You currently own
+              {{ accountDetails[clickedInvestment].amountOfStocks }}
+              "{{ accountDetails[clickedInvestment].stockTicker }}" stock at
+              {{ accountDetails[clickedInvestment].currentPrice }}
+              $ each.
+            </p>
+            <p>Input the amount of stocks you wish to sell</p>
+            <div class="input">
+              <input type="text" v-model="amountOfStock" />
+            </div>
+            <p>
+              Total price:
+              <span v-show="!totalPurchasePriceLoader">{{
+                stockPriceTimesAmountOfStock.toFixed(3)
+              }}</span>
+              $
+            </p>
+            <p>
+              Account funds after sale:
+              {{ accountStore.unusedFunds + stockPriceTimesAmountOfStock }}
+              $
+            </p>
+            <p v-if="isRequestedSaleAmountTooHigh" class="negative-result">
+              You dont own that many "{{
+                accountDetails[clickedInvestment].stockTicker
+              }}" stock
+            </p>
+            <div
+              class="modalButton"
+              @click="sellStockAndAddSaleValueToUnusedFunds()"
+            >
+              <GeneralButton
+                :disabled="isRequestedSaleAmountTooHigh"
+                content="Sell stock"
+                color="#ffe1a1"
+                backgroundColor="#344d67"
+                fsize="12px"
+                padding="10px"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -78,7 +81,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { getAuth } from "firebase/auth";
 import ApiData from "../services/ApiData";
 import AlpacaData from "../services/AlpacaData";
@@ -87,8 +90,12 @@ import InvestmentComponent from "../components/InvestmentComponent.vue";
 import { useGlobalStore } from "../store/globalStore";
 import { useAccountStore } from "../store/accountStore";
 import { useUserStore } from "../store/userStore";
+import { useToast } from "vue-toastification";
+import router from "/src/router/index.js";
 
-let accountDetails = ref();
+const toast = useToast();
+
+let accountDetails = ref([]);
 let loading = ref(true);
 let percentual_difference_DAY = Number;
 
@@ -109,34 +116,13 @@ let setClickedInvestmentIndex = (index) => {
   console.log(clickedInvestment.value);
 };
 
-let isRequestedSaleAmountHigherThanCurrentAmount = (index) => {
-  if (
-    accountDetails.data.investments[index].amountOfStocks < amountOfStock.value
-  ) {
-    isRequestedSaleAmountTooHigh = true;
-  } else {
-    isRequestedSaleAmountTooHigh = false;
-  }
-};
+const setAccountDetails = async () => {
+  accountDetails = await ApiData.getSpecificAccountInvestments(
+    getAuth().currentUser.uid
+  );
+  console.log(accountDetails);
 
-const setTotalSaleValue = (index) => {
-  totalPurchasePriceLoader = true;
-  stockPriceTimesAmountOfStock.value =
-    amountOfStock.value * accountDetails.data.investments[index].currentPrice;
-  totalPurchasePriceLoader = false;
-};
-
-watch(amountOfStock, () => {
-  isRequestedSaleAmountHigherThanCurrentAmount(clickedInvestment.value);
-  setTotalSaleValue(clickedInvestment.value);
-});
-
-let investmentComponentKey = ref(0);
-onBeforeMount(async () => {
-  loading.value = true;
-  accountDetails = await ApiData.getSpecificAccount(getAuth().currentUser.uid);
-
-  await accountDetails.data.investments.filter(async (item) => {
+  await accountDetails.filter(async (item) => {
     item.currentPrice = await AlpacaData.getLatestStockInfo(item.stockTicker);
     if (item.buyPrice > item.currentPrice) {
       item.percentualDifference = `-${(
@@ -153,8 +139,70 @@ onBeforeMount(async () => {
     investmentComponentKey.value += 1;
     return;
   });
-  console.log(accountDetails.data.investments[clickedInvestment.value].title);
-  // $forceUpdate();
+};
+
+const sellStockAndAddSaleValueToUnusedFunds = async () => {
+  loading.value = true;
+  console.log(loading.value);
+  const response = await ApiData.updateInvestmentUpdateAccount(
+    accountDetails[clickedInvestment.value].id,
+    {
+      amountOfStocks: amountOfStock.value,
+    }
+  );
+
+  setAccountDetails();
+
+  userStore.getUserFromDbAndSetFinancials();
+  toast.success(
+    `Sale of ${amountOfStock.value} ${
+      accountDetails[clickedInvestment.value].stockTicker
+    } complete!`
+  );
+  setTimeout(() => {
+    toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
+  }, 5000);
+
+  globalStore.showModal = false;
+  loading.value = false;
+  console.log(loading.value);
+};
+
+let isRequestedSaleAmountHigherThanCurrentAmount = (index) => {
+  if (accountDetails[index].amountOfStocks < amountOfStock.value) {
+    isRequestedSaleAmountTooHigh = true;
+  } else {
+    isRequestedSaleAmountTooHigh = false;
+  }
+};
+
+const setTotalSaleValue = (index) => {
+  totalPurchasePriceLoader = true;
+  stockPriceTimesAmountOfStock.value =
+    amountOfStock.value * accountDetails[index].currentPrice;
+  totalPurchasePriceLoader = false;
+};
+
+watch(
+  () => globalStore.showModal,
+  () => {
+    setTotalSaleValue(clickedInvestment.value);
+    console.log(stockPriceTimesAmountOfStock.value);
+    console.log(globalStore.showModal);
+  }
+);
+
+watch(amountOfStock, () => {
+  isRequestedSaleAmountHigherThanCurrentAmount(clickedInvestment.value);
+  setTotalSaleValue(clickedInvestment.value);
+});
+
+let investmentComponentKey = ref(0);
+onMounted(async () => {
+  loading.value = true;
+
+  await setAccountDetails();
+
   loading.value = false;
 });
 </script>
@@ -264,5 +312,20 @@ onBeforeMount(async () => {
 
 .negative-result {
   color: red;
+}
+
+.portfolio-empty-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.stockpanel-link {
+  text-decoration: none;
+}
+
+.stockpanel-link:hover {
+  text-decoration: underline;
 }
 </style>

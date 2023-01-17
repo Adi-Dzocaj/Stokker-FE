@@ -25,6 +25,10 @@
         <div class="data-piece">
           <h6>Change: {{ percentualDifference }}</h6>
         </div>
+
+        <div class="data-piece">
+          <router-link :to="`/stockpanel/${symbol}`">Statistics</router-link>
+        </div>
       </div>
       <div @click="globalStore.showModal = true">
         <GeneralButton
