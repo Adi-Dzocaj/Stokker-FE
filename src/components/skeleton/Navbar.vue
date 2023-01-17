@@ -1,8 +1,8 @@
 <template>
   <div class="nav-container">
     <div class="nav-menu">
-      <router-link to="#" class="nav-item">
-        <span class="nav-link">Transactions</span>
+      <router-link to="/investments" class="nav-item">
+        <span class="nav-link">Investments</span>
       </router-link>
     </div>
     <div class="hamburger" @click="toggleMenuActivation()">
@@ -74,6 +74,9 @@ const toggleMenuActivation = () => {
   align-items: center;
   background-color: #344d67;
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-logo {
@@ -113,7 +116,7 @@ a {
   align-items: center;
   justify-content: center;
   width: 33%;
-  z-index: 10;
+  z-index: 100000000;
 }
 
 .nav-link {
@@ -156,7 +159,7 @@ a {
 .nav-menu {
   position: fixed;
   left: -100%;
-  top: 70px;
+  top: 10vh;
   gap: 0;
   display: flex;
   flex-direction: column;

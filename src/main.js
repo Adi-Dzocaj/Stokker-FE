@@ -34,6 +34,8 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-createApp(App).use(router).use(Toast).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
+createApp(App).use(router).use(Toast, {
+  maxToasts: 5,
+}).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
 
 // .use(bootstrap)

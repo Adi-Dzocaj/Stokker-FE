@@ -1,171 +1,174 @@
 <template>
-  <div class="stock-information" v-if="!loading">
-    <div>
-      <div class="stock-name">
-        <h6>
-          {{ stockInformation.name }}
-        </h6>
-      </div>
-      <div class="stock-ticker">
-        <p>{{ stockInformation.exchange }} | {{ stockInformation.class }}</p>
-        <span>{{ stockInformation.symbol }}</span>
-      </div>
-    </div>
-    <Line
-      class="chart"
-      :data="
-        userRequestedChartDataBasedOnTime[3].active === true
-          ? chartData_YEAR
-          : userRequestedChartDataBasedOnTime[2].active === true
-          ? chartData_MONTH
-          : userRequestedChartDataBasedOnTime[1].active === true
-          ? chartData_WEEK
-          : userRequestedChartDataBasedOnTime[0].active === true
-          ? chartData_DAY
-          : null
-      "
-      :options="options"
-    />
-    <div class="chart-options">
-      <button
-        :disabled="areOptionButtonsDisabled"
-        class="option"
-        @click="setActiveData('dayData')"
-      >
-        1 day
-      </button>
-      <button
-        :disabled="areOptionButtonsDisabled"
-        class="option"
-        @click="setActiveData('weekData')"
-      >
-        1 week
-      </button>
-      <button
-        :disabled="areOptionButtonsDisabled"
-        class="option"
-        @click="setActiveData('monthData')"
-      >
-        1 month
-      </button>
-      <button
-        :disabled="areOptionButtonsDisabled"
-        class="option"
-        @click="setActiveData('yearData')"
-      >
-        1 year
-      </button>
-    </div>
-
-    <div
-      class="purchase-related-data"
-      v-if="stockData_DAY && stockData_DAY.length > 0"
-    >
-      <div class="purchase-related-data-header">
-        <h4>Stock info</h4>
-        <h6>-{{ current_stock_related_date }}</h6>
-      </div>
-      <div class="current-day-stock-data">
-        <div class="data-box">
-          <p class="data-box-title">Opened at</p>
-          <p>{{ stockData_DAY[0].c }} $</p>
+  <div class="stock-information-container">
+    <div class="stock-information" v-if="!loading">
+      <div>
+        <div class="stock-name">
+          <h6>
+            {{ stockInformation.name }}
+          </h6>
         </div>
-        <div class="data-box">
-          <p class="data-box-title">Closed at</p>
-          <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
-        </div>
-        <div class="data-box">
-          <p class="data-box-title">Lowest today</p>
-          <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].l }} $</p>
-          <p v-else>Market is closed</p>
-        </div>
-        <div class="data-box">
-          <p></p>
-          <p class="data-box-title">Highest today</p>
-          <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].h }} $</p>
-          <p v-else>Market is closed</p>
-        </div>
-        <div class="data-box">
-          <p></p>
-          <p class="data-box-title">Percentual movement</p>
-          <p
-            class="negative-result"
-            v-if="
-              stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
-            "
-          >
-            -{{ percentual_difference_DAY.toFixed(3) }} %
-          </p>
-          <p class="positive-percentage" v-else>
-            +{{ percentual_difference_DAY.toFixed(3) }} %
-          </p>
+        <div class="stock-ticker">
+          <p>{{ stockInformation.exchange }} | {{ stockInformation.class }}</p>
+          <span>{{ stockInformation.symbol }}</span>
         </div>
       </div>
-    </div>
-    <div class="market-closed-announcement" v-else>
-      - Market is closed today -
-    </div>
-    <div @click="showModal = true" class="buy-button-container">
-      <GeneralButton
-        color="#ffe1a1"
-        backgroundColor="#344d67"
-        content="Place order"
-        fsize="12px"
-        padding="10px"
-        :key="toggleToReRenderGeneralButton"
+      <Line
+        class="chart"
+        :data="
+          userRequestedChartDataBasedOnTime[3].active === true
+            ? chartData_YEAR
+            : userRequestedChartDataBasedOnTime[2].active === true
+            ? chartData_MONTH
+            : userRequestedChartDataBasedOnTime[1].active === true
+            ? chartData_WEEK
+            : userRequestedChartDataBasedOnTime[0].active === true
+            ? chartData_DAY
+            : null
+        "
+        :options="options"
       />
-    </div>
-    <div class="modal-container" v-show="showModal">
-      <div class="modal" v-on:clickout="showModal = false">
-        <h5>{{ stockInformation.name }}</h5>
-        <div class="modal-content">
-          <p>Input the stock amount</p>
-          <div class="input">
-            <input type="text" v-model="amountOfStock" />
+      <div class="chart-options">
+        <button
+          :disabled="areOptionButtonsDisabled"
+          class="option"
+          @click="setActiveData('dayData')"
+        >
+          1 day
+        </button>
+        <button
+          :disabled="areOptionButtonsDisabled"
+          class="option"
+          @click="setActiveData('weekData')"
+        >
+          1 week
+        </button>
+        <button
+          :disabled="areOptionButtonsDisabled"
+          class="option"
+          @click="setActiveData('monthData')"
+        >
+          1 month
+        </button>
+        <button
+          :disabled="areOptionButtonsDisabled"
+          class="option"
+          @click="setActiveData('yearData')"
+        >
+          1 year
+        </button>
+      </div>
+
+      <div
+        class="purchase-related-data"
+        v-if="stockData_DAY && stockData_DAY.length > 0"
+      >
+        <div class="purchase-related-data-header">
+          <h4>Stock info</h4>
+          <h6>-{{ current_stock_related_date }}</h6>
+        </div>
+        <div class="current-day-stock-data">
+          <div class="data-box">
+            <p class="data-box-title">Opened at</p>
+            <p>{{ stockData_DAY[0].c }} $</p>
           </div>
-          <p>
-            Total price:
-            <span v-show="!totalPurchasePriceLoader">{{
-              stockPriceTimesAmountOfStock
-            }}</span>
-            $
-          </p>
-          <p>
-            Account funds after purchase:
-            {{
-              (accountStore.unusedFunds - stockPriceTimesAmountOfStock).toFixed(
-                3
-              )
-            }}
-          </p>
-          <p
-            v-if="isPurchaseValueHigherThanUnusedFunds"
-            class="negative-result"
-          >
-            {{ cantMakePurchase }}
-          </p>
-          <div class="dynamic-purchase-information"></div>
-          <div class="modalButton" @click="addInvestmentToUser()">
-            <GeneralButton
-              :disabled="isPurchaseValueHigherThanUnusedFunds"
-              content="Place order"
-              color="#ffe1a1"
-              backgroundColor="#344d67"
-              fsize="12px"
-              padding="10px"
-            />
+          <div class="data-box">
+            <p class="data-box-title">Closed at</p>
+            <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
+          </div>
+          <div class="data-box">
+            <p class="data-box-title">Lowest today</p>
+            <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].l }} $</p>
+            <p v-else>Market is closed</p>
+          </div>
+          <div class="data-box">
+            <p></p>
+            <p class="data-box-title">Highest today</p>
+            <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].h }} $</p>
+            <p v-else>Market is closed</p>
+          </div>
+          <div class="data-box">
+            <p></p>
+            <p class="data-box-title">Percentual movement</p>
+            <p
+              class="negative-result"
+              v-if="
+                stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
+              "
+            >
+              -{{ percentual_difference_DAY.toFixed(3) }} %
+            </p>
+            <p class="positive-percentage" v-else>
+              +{{ percentual_difference_DAY.toFixed(3) }} %
+            </p>
           </div>
         </div>
       </div>
+      <div class="market-closed-announcement" v-else>
+        - Market is closed today -
+      </div>
+      <div @click="showModal = true" class="buy-button-container">
+        <GeneralButton
+          color="#ffe1a1"
+          backgroundColor="#344d67"
+          content="Place order"
+          fsize="12px"
+          padding="10px"
+          :key="toggleToReRenderGeneralButton"
+        />
+      </div>
+      <div class="modal-container" v-show="showModal">
+        <div class="modal" v-on:clickout="showModal = false">
+          <h5>{{ stockInformation.name }}</h5>
+          <div class="modal-content">
+            <p>Input the stock amount</p>
+            <div class="input">
+              <input type="text" v-model="amountOfStock" />
+            </div>
+            <p>
+              Total price:
+              <span v-show="!totalPurchasePriceLoader">{{
+                stockPriceTimesAmountOfStock
+              }}</span>
+              $
+            </p>
+            <p>
+              Account funds after purchase:
+              {{
+                (
+                  accountStore.unusedFunds - stockPriceTimesAmountOfStock
+                ).toFixed(3)
+              }}
+            </p>
+            <p
+              v-if="isPurchaseValueHigherThanUnusedFunds"
+              class="negative-result"
+            >
+              {{ cantMakePurchase }}
+            </p>
+            <div class="dynamic-purchase-information"></div>
+            <div class="modalButton" @click="addInvestmentToUser()">
+              <GeneralButton
+                :disabled="isPurchaseValueHigherThanUnusedFunds"
+                content="Place order"
+                color="#ffe1a1"
+                backgroundColor="#344d67"
+                fsize="12px"
+                padding="10px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ArticleSectionHeaderComponent />
+      <div class="news-articles" v-for="article in stockNews" :key="article.id">
+        <ArticleComponent :content="article.headline" :location="article.url" />
+      </div>
     </div>
 
-    <ArticleSectionHeaderComponent />
-    <div class="news-articles" v-for="article in stockNews" :key="article.id">
-      <ArticleComponent :content="article.headline" :location="article.url" />
+    <div v-else>
+      <p>Loading...</p>
     </div>
-  </div>
-  <div v-else>
-    <p>Loading...</p>
   </div>
 </template>
 
@@ -698,5 +701,21 @@ onMounted(async () => {
 
 .market-closed-announcement {
   text-align: center;
+}
+
+@media screen and (min-width: 1024px) {
+  .stock-information {
+    width: 80%;
+  }
+  .stock-information-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .stock-information {
+    width: 65%;
+  }
 }
 </style>

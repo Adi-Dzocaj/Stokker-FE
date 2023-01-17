@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="home-page-container">
     <div class="hero-image">
       <div class="hero-content">
-        <h4>The ultimate trading platform for beginners</h4>
+        <h4>A simple trading platform for beginners</h4>
         <div class="hero-button" v-if="!userStore.user">
           <ButtonComponent
             color="#FFE1A1"
@@ -89,6 +89,18 @@ console.log(toRaw(globalStore.alpacaNewsData));
 @media (min-width: 768px) {
   .hero-content {
     font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .hero-image::before {
+    height: 400px;
+  }
+  .hero-image {
+    height: 400px;
+  }
+  .hero-content {
+    font-size: 30px;
   }
 }
 </style>
