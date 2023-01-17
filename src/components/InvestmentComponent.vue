@@ -11,7 +11,7 @@
         </div>
 
         <div class="data-piece">
-          <h6>Current Price: {{ currentPrice }}</h6>
+          <h6>Current Price: {{ currentPrice }} $</h6>
         </div>
 
         <div class="data-piece">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="data-piece">
-          <h6>Total value: {{ totalValue }}</h6>
+          <h6>Total value: {{ totalValue }} $</h6>
         </div>
 
         <div class="data-piece">

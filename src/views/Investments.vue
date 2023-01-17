@@ -2,12 +2,6 @@
   <div class="investments-panel" v-if="!loading && accountDetails">
     <div v-if="accountDetails.length === 0">
       <h4 class="portfolio-empty-header">Your portfolio is empty.</h4>
-      <h5>
-        Head over to the
-        <router-link class="stockpanel-link" to="/stockpanel"
-          >Stockpanel</router-link
-        >, search for a stock, and invest!
-      </h5>
     </div>
     <h4 v-show="accountDetails.length > 0">Your investments</h4>
     <div v-for="(investment, index) in accountDetails" :key="investment.id">

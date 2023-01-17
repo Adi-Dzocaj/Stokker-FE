@@ -1,14 +1,14 @@
 <template>
   <div class="nav-container">
     <div class="nav-menu">
-      <router-link @click="closeMenu()" to="/investments" class="nav-item">
-        <span class="nav-link">Investments</span>
-      </router-link>
       <router-link @click="closeMenu()" to="/dashboard" class="nav-item">
         <span class="nav-link">Dashboard</span>
       </router-link>
       <router-link @click="closeMenu()" to="/stockpanel" class="nav-item">
         <span class="nav-link">Stockpanel</span>
+      </router-link>
+      <router-link @click="closeMenu()" to="/investments" class="nav-item">
+        <span class="nav-link">Investments</span>
       </router-link>
     </div>
     <div class="hamburger" @click="toggleMenuActivation()">

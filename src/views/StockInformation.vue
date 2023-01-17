@@ -339,6 +339,7 @@ const addInvestmentToUser = async () => {
     Title: stockInformation.name,
     StockTicker: stockInformation.symbol,
     AmountOfStocks: amountOfStock.value,
+    CurrentPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
     BuyPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
     PurchasedAt: `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
       .toISOString()
