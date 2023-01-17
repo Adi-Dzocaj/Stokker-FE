@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import { useUserStore } from './userStore'
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 export const useGlobalStore = defineStore("global", () => {
   const alpacaNewsData = null;
+  const showModal = ref(false)
 
     const setLocationProp = computed(() => {
         const userStore = useUserStore();
@@ -18,5 +19,6 @@ export const useGlobalStore = defineStore("global", () => {
         alpacaNewsData,
         setLocationProp,
         setContentProp,
+        showModal
     };
   });

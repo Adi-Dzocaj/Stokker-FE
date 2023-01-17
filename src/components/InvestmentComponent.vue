@@ -4,40 +4,55 @@
       <h5>{{ title }}</h5>
       <h6>{{ symbol }}</h6>
     </div>
+    <div class="investment-content">
+      <div>
+        <div class="data-piece">
+          <h6>Bought at: {{ buyPrice }} $</h6>
+        </div>
 
-    <div class="data-piece">
-      <h6>Bought at: {{ buyPrice }} $</h6>
-    </div>
+        <div class="data-piece">
+          <h6>Current Price: {{ currentPrice }}</h6>
+        </div>
 
-    <div class="data-piece">
-      <h6>Current Price: {{ currentPrice }}</h6>
-    </div>
+        <div class="data-piece">
+          <h6>Amount: {{ amount }}</h6>
+        </div>
 
-    <div class="data-piece">
-      <h6>Amount: {{ amount }}</h6>
-    </div>
+        <div class="data-piece">
+          <h6>Total value: {{ totalValue }}</h6>
+        </div>
 
-    <div class="data-piece">
-      <h6>Total value: {{ totalValue }}</h6>
-    </div>
-
-    <div class="data-piece">
-      <h6>Change: {{ percentualIncrease }}</h6>
+        <div class="data-piece">
+          <h6>Change: {{ percentualDifference }}</h6>
+        </div>
+      </div>
+      <div @click="globalStore.showModal = true">
+        <GeneralButton
+          content="Sell stock"
+          backgroundColor="#DC8D8D"
+          padding="4px"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps } from "vue";
+import GeneralButton from "../components/GeneralButton.vue";
+import { useGlobalStore } from "../store/globalStore";
+
+const globalStore = useGlobalStore();
 
 defineProps([
+  "percentColor",
   "title",
   "amount",
   "totalValue",
   "symbol",
   "buyPrice",
   "currentPrice",
-  "percentualIncrease",
+  "percentualDifference",
 ]);
 </script>
 
@@ -66,6 +81,12 @@ defineProps([
 
 .investment-header h6 {
   color: #808080;
+}
+
+.investment-content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .data-piece {

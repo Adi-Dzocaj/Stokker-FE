@@ -130,7 +130,14 @@
             }}</span>
             $
           </p>
-          <p>Account funds after purchase: {{ accountStore.unusedFunds }}</p>
+          <p>
+            Account funds after purchase:
+            {{
+              (accountStore.unusedFunds - stockPriceTimesAmountOfStock).toFixed(
+                3
+              )
+            }}
+          </p>
           <p
             v-if="isPurchaseValueHigherThanUnusedFunds"
             class="negative-result"
@@ -270,6 +277,7 @@ const setActiveData = (title) => {
   userRequestedChartDataBasedOnTime.forEach((item) => {
     item.active = false;
   });
+
   userRequestedChartDataBasedOnTime.map((item) => {
     if (item.title === title) {
       item.active = true;
@@ -416,20 +424,26 @@ onMounted(async () => {
     "1Day"
   );
 
-  stockData_YEAR.forEach((bar) => {
-    amountOfBars_YEAR.push("");
-    closingValueBars_YEAR.push(bar.c);
-  });
+  if (stockData_YEAR) {
+    stockData_YEAR.forEach((bar) => {
+      amountOfBars_YEAR.push("");
+      closingValueBars_YEAR.push(bar.c);
+    });
+  }
 
-  stockData_MONTH.forEach((bar) => {
-    amountOfBars_MONTH.push("");
-    closingValueBars_MONTH.push(bar.c);
-  });
+  if (stockData_MONTH) {
+    stockData_MONTH.forEach((bar) => {
+      amountOfBars_MONTH.push("");
+      closingValueBars_MONTH.push(bar.c);
+    });
+  }
 
-  stockData_WEEK.forEach((bar) => {
-    amountOfBars_WEEK.push("");
-    closingValueBars_WEEK.push(bar.c);
-  });
+  if (stockData_WEEK) {
+    stockData_WEEK.forEach((bar) => {
+      amountOfBars_WEEK.push("");
+      closingValueBars_WEEK.push(bar.c);
+    });
+  }
   if (stockData_DAY) {
     stockData_DAY.forEach((bar) => {
       amountOfBars_DAY.push("");
@@ -451,9 +465,11 @@ onMounted(async () => {
 
   setCurrentStockRelatedDate();
 
-  stockPriceTimesAmountOfStock =
-    amountOfStock.value *
-    stockData_WEEK[stockData_WEEK.length - 1].c.toFixed(3);
+  if (stockData_WEEK) {
+    stockPriceTimesAmountOfStock =
+      amountOfStock.value *
+      stockData_WEEK[stockData_WEEK.length - 1].c.toFixed(3);
+  }
 
   watch(amountOfStock, () => {
     totalPurchasePriceLoader.value = true;

@@ -28,9 +28,8 @@
 
 <script setup>
 import GeneralButton from "../components/GeneralButton.vue";
-import { defineProps } from "vue";
 defineProps(["buttonContent"]);
-import { ref, defineExpose } from "vue";
+import { ref, defineExpose, defineProps } from "vue";
 
 let modalAccountBalanceInput = ref();
 defineExpose({ modalAccountBalanceInput });
