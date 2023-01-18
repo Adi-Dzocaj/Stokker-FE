@@ -7,7 +7,7 @@
       buttonContent="Save"
     />
     <div class="financials-container">
-      <FinancialsComponent />
+      <FinancialsComponent :key="financialsComponentKey" />
     </div>
 
     <router-link to="/stockpanel">stockpanel</router-link>
@@ -23,12 +23,35 @@ import ApiData from "../services/ApiData";
 import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
 import { useAccountStore } from "../store/accountStore";
+import { useGlobalStore } from "../store/globalStore";
 
 let showModal = ref(Boolean);
 let loading = ref(true);
 
+let financialsComponentKey = ref(1);
+
 let areInvestmentsLoaded = ref(false);
 
+const startingCapitalAmount = ref(null);
+
+const userStore = useUserStore();
+const globalStore = useGlobalStore();
+
+const accountStore = useAccountStore();
+
+const updateAccount = async () => {
+  await globalStore.setCurrentPricesUpdateAccount();
+  await ApiData.updateAccountFundsBasedOnCurrentInvestmentsAndUnusedFunds(
+    getAuth().currentUser.uid
+  );
+};
+
+setInterval(async () => {
+  await updateAccount();
+  await accountStore.getUserAccountAndSetInvestments();
+  await userStore.getUserFromDbAndSetFinancials();
+  financialsComponentKey.value += 1;
+}, 10000);
 onMounted(async () => {
   loading.value = true;
   const specificUser = await ApiData.getSpecificUser(getAuth().currentUser.uid);
@@ -40,18 +63,15 @@ onMounted(async () => {
     showModal.value = true;
   }
 
+  await updateAccount();
   await accountStore.getUserAccountAndSetInvestments();
-  console.log(accountStore.investments);
+  await userStore.getUserFromDbAndSetFinancials();
+  financialsComponentKey.value += 1;
+  console.log(financialsComponentKey.value);
+  console.log(accountStore.accountBalance);
+
   loading.value = false;
 });
-
-const startingCapitalAmount = ref(null);
-
-const userStore = useUserStore();
-
-userStore.getUserFromDbAndSetFinancials();
-
-const accountStore = useAccountStore();
 
 const updateBalanceAndCloseModal = async () => {
   console.log(getAuth().currentUser.uid);

@@ -39,7 +39,7 @@ export const useUserStore = defineStore('userStore', {
       const response = await ApiData.getSpecificUser(getAuth().currentUser.uid);
       useAccountStore().accountBalance = response.data.account.accountBalance
       useAccountStore().unusedFunds = response.data.account.unusedFunds
-      // console.log(response)
+      console.log(response)
       return
     }
   },

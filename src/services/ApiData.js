@@ -51,6 +51,12 @@ const updateInvestment = async (investmentId, currentPrice) => {
     return response
 }
 
+const updateAccountFundsBasedOnCurrentInvestmentsAndUnusedFunds = async (user) => {
+    const response = await axios.put(`${BASE_URL}/Account/Investment/${user}`)
+    console.log(response)
+    return response
+}
+
 export default {
     postUser,
     getUsers,
@@ -59,5 +65,6 @@ export default {
     postInvestment,
     getSpecificAccountInvestments,
     updateInvestmentUpdateAccount,
-    updateInvestment
+    updateInvestment,
+    updateAccountFundsBasedOnCurrentInvestmentsAndUnusedFunds
   };
