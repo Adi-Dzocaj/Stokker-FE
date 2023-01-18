@@ -20,7 +20,7 @@
     </div>
     <div v-if="accountDetails.length > 0">
       <div class="modal-container" v-show="globalStore.showModal">
-        <div class="modal">
+        <div class="modal" v-if="accountDetails[clickedInvestment]">
           <h5>
             {{ accountDetails[clickedInvestment].title }}
           </h5>
@@ -94,6 +94,7 @@ let loading = ref(true);
 let percentual_difference_DAY = Number;
 
 let clickedInvestment = ref(0);
+let clickedInvestmentLoader = ref(true);
 const globalStore = useGlobalStore();
 const accountStore = useAccountStore();
 const userStore = useUserStore();
@@ -106,8 +107,10 @@ let totalPurchasePriceLoader = ref(true);
 let stockPriceTimesAmountOfStock = ref(0);
 
 let setClickedInvestmentIndex = (index) => {
+  clickedInvestmentLoader.value = true;
   clickedInvestment.value = index;
-  console.log(clickedInvestment.value);
+  clickedInvestmentLoader.value = false;
+  console.log(clickedInvestmentLoader.value);
 };
 
 const setAccountDetails = async () => {
@@ -136,27 +139,34 @@ const setAccountDetails = async () => {
 
 const sellStockAndAddSaleValueToUnusedFunds = async () => {
   loading.value = true;
-  console.log(loading.value);
-  const response = await ApiData.updateInvestmentUpdateAccount(
-    accountDetails[clickedInvestment.value].id,
-    {
-      amountOfStocks: amountOfStock.value,
-    }
-  );
+  if (
+    amountOfStock.value > accountDetails[clickedInvestment.value].amountOfStocks
+  ) {
+    toast.warning("You're trying to fool the system. Stop it!");
+  } else {
+    const response = await ApiData.updateInvestmentUpdateAccount(
+      accountDetails[clickedInvestment.value].id,
+      {
+        amountOfStocks: amountOfStock.value,
+      }
+    );
 
-  setAccountDetails();
+    setAccountDetails();
 
-  userStore.getUserFromDbAndSetFinancials();
-  toast.success(
-    `Sale of ${amountOfStock.value} ${
-      accountDetails[clickedInvestment.value].stockTicker
-    } complete!`
-  );
-  setTimeout(() => {
-    toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
-  }, 5000);
+    userStore.getUserFromDbAndSetFinancials();
+    toast.success(
+      `Sale of ${amountOfStock.value} ${
+        accountDetails[clickedInvestment.value].stockTicker
+      } complete!`
+    );
+    setTimeout(() => {
+      toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
+    }, 5000);
 
-  globalStore.showModal = false;
+    amountOfStock.value = 1;
+    globalStore.showModal = false;
+  }
+
   loading.value = false;
   console.log(loading.value);
 };
@@ -170,18 +180,20 @@ let isRequestedSaleAmountHigherThanCurrentAmount = (index) => {
 };
 
 const setTotalSaleValue = (index) => {
-  totalPurchasePriceLoader = true;
+  totalPurchasePriceLoader.value = true;
   stockPriceTimesAmountOfStock.value =
     amountOfStock.value * accountDetails[index].currentPrice;
-  totalPurchasePriceLoader = false;
+  totalPurchasePriceLoader.value = false;
 };
 
 watch(
   () => globalStore.showModal,
   () => {
-    setTotalSaleValue(clickedInvestment.value);
-    console.log(stockPriceTimesAmountOfStock.value);
-    console.log(globalStore.showModal);
+    if (!clickedInvestmentLoader) {
+      setTotalSaleValue(clickedInvestment.value);
+      console.log(stockPriceTimesAmountOfStock.value);
+      console.log(globalStore.showModal);
+    }
   }
 );
 
