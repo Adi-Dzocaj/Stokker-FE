@@ -34,9 +34,10 @@ let areInvestmentsLoaded = ref(false);
 
 const startingCapitalAmount = ref(null);
 
+const HOUR_IN_MILLISECONDS = 3600000;
+
 const userStore = useUserStore();
 const globalStore = useGlobalStore();
-
 const accountStore = useAccountStore();
 
 const updateAccount = async () => {
@@ -78,8 +79,12 @@ const updateBalanceAndCloseModal = async () => {
   console.log(startingCapitalAmount.value.modalAccountBalanceInput);
   getAuth().currentUser;
   await ApiData.updateAccount(getAuth().currentUser.uid, {
+    startingCapital: startingCapitalAmount.value.modalAccountBalanceInput,
     accountBalance: startingCapitalAmount.value.modalAccountBalanceInput,
     unusedFunds: startingCapitalAmount.value.modalAccountBalanceInput,
+    creationDate: `${new Date(new Date().getTime() + HOUR_IN_MILLISECONDS)
+      .toISOString()
+      .slice(0, -5)}Z`,
   });
 
   userStore.getUserFromDbAndSetFinancials();
