@@ -190,7 +190,7 @@ a {
   left: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 956px) {
   .hamburger {
     display: none;
   }
@@ -213,9 +213,7 @@ a {
   .nav-item {
     border-bottom: none;
   }
-}
 
-@media (min-width: 768px) {
   .nav-link {
     font-size: 20px;
   }

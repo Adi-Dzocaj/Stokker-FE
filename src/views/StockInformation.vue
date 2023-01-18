@@ -72,7 +72,7 @@
             <p>{{ stockData_DAY[0].c }} $</p>
           </div>
           <div class="data-box">
-            <p class="data-box-title">Closed at</p>
+            <p class="data-box-title">Current price</p>
             <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
           </div>
           <div class="data-box">

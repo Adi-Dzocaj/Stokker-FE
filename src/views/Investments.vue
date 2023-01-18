@@ -117,7 +117,6 @@ const setAccountDetails = async () => {
   console.log(accountDetails);
 
   await accountDetails.filter(async (item) => {
-    item.currentPrice = await AlpacaData.getLatestStockInfo(item.stockTicker);
     if (item.buyPrice > item.currentPrice) {
       item.percentualDifference = `-${(
         Math.abs((item.buyPrice - item.currentPrice) / item.buyPrice) * 100
@@ -196,6 +195,9 @@ onMounted(async () => {
   loading.value = true;
 
   await setAccountDetails();
+
+  // Verify that this works
+  await globalStore.setCurrentPricesUpdateAccount();
 
   loading.value = false;
 });
