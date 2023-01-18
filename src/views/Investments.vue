@@ -3,7 +3,7 @@
     <div v-if="accountDetails.length === 0">
       <h4 class="portfolio-empty-header">Your portfolio is empty.</h4>
     </div>
-    <h4 v-show="accountDetails.length > 0">Your investments</h4>
+    <h4 v-show="accountDetails.length > 0">My investments</h4>
     <div v-for="(investment, index) in accountDetails" :key="investment.id">
       <div @click="setClickedInvestmentIndex(index)">
         <InvestmentComponent
@@ -110,7 +110,6 @@ let setClickedInvestmentIndex = (index) => {
   clickedInvestmentLoader.value = true;
   clickedInvestment.value = index;
   clickedInvestmentLoader.value = false;
-  console.log(clickedInvestmentLoader.value);
 };
 
 const setAccountDetails = async () => {

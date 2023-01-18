@@ -6,6 +6,7 @@ import { getAuth } from "firebase/auth";
 export const useAccountStore = defineStore("account", () => {
   const accountBalance = ref({accountBalance: null})
   const unusedFunds = ref({unusedFunds: null})
+  const startingCapital = ref({startingCapital: null})
   const investments = ref()
 
   const getUserAccountAndSetInvestments = async () => {

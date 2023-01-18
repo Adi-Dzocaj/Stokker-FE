@@ -9,8 +9,9 @@
     <div class="financials-container">
       <FinancialsComponent :key="financialsComponentKey" />
     </div>
-
-    <router-link to="/stockpanel">stockpanel</router-link>
+    <h4 class="progress-header">My progress</h4>
+    <Line class="chart" :data="chartData_USER" :options="options" />
+    <h4 class="progress-header">My best investments</h4>
   </div>
   <div v-else>Loading...</div>
 </template>
@@ -24,6 +25,31 @@ import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
 import { useAccountStore } from "../store/accountStore";
 import { useGlobalStore } from "../store/globalStore";
+
+// ChartJS
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "vue-chartjs";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+let chartData_USER;
 
 let showModal = ref(Boolean);
 let loading = ref(true);
@@ -45,6 +71,15 @@ const updateAccount = async () => {
   await ApiData.updateAccountFundsBasedOnCurrentInvestmentsAndUnusedFunds(
     getAuth().currentUser.uid
   );
+};
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
 };
 
 setInterval(async () => {
@@ -71,6 +106,16 @@ onMounted(async () => {
   console.log(financialsComponentKey.value);
   console.log(accountStore.accountBalance);
 
+  chartData_USER = {
+    labels: ["Beginning", "Now"],
+    datasets: [
+      {
+        label: "",
+        backgroundColor: "black",
+        data: [accountStore.startingCapital, accountStore.accountBalance],
+      },
+    ],
+  };
   loading.value = false;
 });
 
@@ -96,5 +141,21 @@ const updateBalanceAndCloseModal = async () => {
 <style scoped>
 .dashboard {
   margin: 20px;
+}
+
+.financials-container {
+  margin-bottom: 30px;
+}
+
+.progress-header {
+  display: inline;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 5px;
+}
+
+.chart {
+  max-height: 300px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>
