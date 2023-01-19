@@ -126,18 +126,21 @@
             </div>
             <p>
               Total price:
-              <span v-show="!totalPurchasePriceLoader">{{
+              <span v-show="!totalPurchasePriceLoader && amountOfStock">{{
                 stockPriceTimesAmountOfStock
               }}</span>
               $
             </p>
             <p>
               Account funds after purchase:
-              {{
-                (
-                  accountStore.unusedFunds - stockPriceTimesAmountOfStock
-                ).toFixed(3)
-              }}
+              <span v-show="amountOfStock"
+                >{{
+                  (
+                    accountStore.unusedFunds - stockPriceTimesAmountOfStock
+                  ).toFixed(3)
+                }}
+              </span>
+              $
             </p>
             <p
               v-if="isPurchaseValueHigherThanUnusedFunds"
@@ -148,7 +151,9 @@
             <div class="dynamic-purchase-information"></div>
             <div class="modalButton" @click="addInvestmentToUser()">
               <GeneralButton
-                :disabled="isPurchaseValueHigherThanUnusedFunds"
+                :disabled="
+                  isPurchaseValueHigherThanUnusedFunds || !amountOfStock
+                "
                 content="Place order"
                 color="#ffe1a1"
                 backgroundColor="#344d67"
@@ -236,7 +241,7 @@ let stockData_WHOLE_DAY = ref([]);
 
 let current_stock_related_date;
 
-let amountOfStock = ref(1);
+let amountOfStock = ref();
 
 let stockPriceTimesAmountOfStock = ref();
 
@@ -310,25 +315,22 @@ const setCurrentStockRelatedDate = () => {
 
   if (stockData_DAY) {
     currentYear = new Date(stockData_DAY[0].t).getFullYear();
-  }
 
-  if (stockData_DAY && new Date(stockData_DAY[0].t).getMonth() + 1 < 10) {
-    currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1)
-      .toString()
-      .padStart(2, 0);
-  } else if (
-    stockData_DAY &&
-    new Date(stockData_DAY[0].t).getMonth() + 1 > 10
-  ) {
-    currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1).toString();
-  }
+    if (new Date(stockData_DAY[0].t).getMonth() + 1 < 10) {
+      currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1)
+        .toString()
+        .padStart(2, 0);
+    } else if (new Date(stockData_DAY[0].t).getMonth() + 1 > 10) {
+      currentMonth = (new Date(stockData_DAY[0].t).getMonth() + 1).toString();
+    }
 
-  if (stockData_DAY && new Date(stockData_DAY[0].t).getDate() + 1 < 10) {
-    currentDay = (new Date(stockData_DAY[0].t).getDate() + 1)
-      .toString()
-      .padStart(2, 0);
-  } else if (stockData_DAY && new Date(stockData_DAY[0].t).getDate() + 1 > 10) {
-    currentDay = (new Date(stockData_DAY[0].t).getDate() + 1).toString();
+    if (new Date(stockData_DAY[0].t).getDate() + 1 < 10) {
+      currentDay = (new Date(stockData_DAY[0].t).getDate() + 1)
+        .toString()
+        .padStart(2, 0);
+    } else if (new Date(stockData_DAY[0].t).getDate() + 1 > 10) {
+      currentDay = (new Date(stockData_DAY[0].t).getDate() + 1).toString();
+    }
   }
 
   current_stock_related_date = `${currentYear}-${currentMonth}-${currentDay}`;
@@ -453,9 +455,7 @@ onMounted(async () => {
       amountOfBars_DAY.push("");
       closingValueBars_DAY.push(bar.c);
     });
-  }
 
-  if (stockData_DAY) {
     percentual_difference_DAY =
       Math.abs(
         (stockData_DAY[0].c - stockData_DAY[stockData_DAY.length - 1].c) /
