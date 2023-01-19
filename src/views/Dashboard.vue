@@ -24,10 +24,19 @@
         :data="chartData_BAR_INVESTMENTS"
         :options="options"
       />
-      <h4 class="progress-header">Diversification graphic</h4>
-      <Pie class="chart" :data="chartData_PIE_INVESTMENTS" :options="options" />
+      <h4 v-if="amountOfInvestments.length > 0" class="progress-header">
+        Diversification graphic
+      </h4>
+      <Pie
+        :key="chartComponentKey"
+        class="chart"
+        :data="chartData_PIE_INVESTMENTS"
+        :options="options"
+      />
     </div>
-    <div v-else>Loading...</div>
+    <div class="loading-container" v-else>
+      <div><LoadingSpinner /></div>
+    </div>
   </div>
 </template>
 
@@ -40,6 +49,7 @@ import { getAuth } from "firebase/auth";
 import { useUserStore } from "../store/userStore";
 import { useAccountStore } from "../store/accountStore";
 import { useGlobalStore } from "../store/globalStore";
+import LoadingSpinner from "../components/LoadingSpinner.vue";
 
 // ChartJS
 import {
@@ -245,6 +255,14 @@ const updateBalanceAndCloseModal = async () => {
   max-height: 300px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.loading-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 1024px) {

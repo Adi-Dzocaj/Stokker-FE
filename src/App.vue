@@ -1,3 +1,14 @@
+<template>
+  <div class="loading-container" v-if="userStore.loading">
+    <div><LoadingSpinner /></div>
+  </div>
+  <div class="app" v-else>
+    <Navbar />
+    <router-view class="router-view"></router-view>
+    <FooterBar />
+  </div>
+</template>
+
 <script setup>
 import Navbar from "./components/skeleton/Navbar.vue";
 import FooterBar from "./components/skeleton/FooterBar.vue";
@@ -8,6 +19,7 @@ import { useGlobalStore } from "./store/globalStore";
 import { useUserStore } from "../src/store/userStore/";
 
 import ALPACA_API from "../src/services/AlpacaData";
+import LoadingSpinner from "../src/components/LoadingSpinner.vue";
 
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
@@ -19,17 +31,6 @@ onMounted(async () => {
 });
 </script>
 
-<template>
-  <div v-if="userStore.loading">
-    <p>Loading...</p>
-  </div>
-  <div class="app" v-else>
-    <Navbar />
-    <router-view class="router-view"></router-view>
-    <FooterBar />
-  </div>
-</template>
-
 <style scoped>
 .app {
   display: flex;
@@ -38,5 +39,13 @@ onMounted(async () => {
 
 .router-view {
   min-height: calc(100vh - 10vh - 20vh);
+}
+
+.loading-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

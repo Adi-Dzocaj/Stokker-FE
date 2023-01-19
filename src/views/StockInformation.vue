@@ -171,8 +171,8 @@
       </div>
     </div>
 
-    <div v-else>
-      <p>Loading...</p>
+    <div class="loading-container" v-else>
+      <div><LoadingSpinner /></div>
     </div>
   </div>
 </template>
@@ -189,6 +189,7 @@ import { useUserStore } from "../store/userStore";
 import "clickout-event";
 import { useToast } from "vue-toastification";
 import router from "/src/router/index.js";
+import LoadingSpinner from "../components/LoadingSpinner.vue";
 
 const toast = useToast();
 
@@ -702,6 +703,14 @@ onMounted(async () => {
 
 .market-closed-announcement {
   text-align: center;
+}
+
+.loading-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 1024px) {
