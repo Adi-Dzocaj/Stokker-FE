@@ -1,19 +1,34 @@
 <template>
-  <div class="dashboard" v-if="!loading">
-    <ModalComponent
-      ref="startingCapitalAmount"
-      @close-modal="updateBalanceAndCloseModal"
-      v-show="showModal"
-      buttonContent="Save"
-    />
-    <div class="financials-container">
-      <FinancialsComponent :key="financialsComponentKey" />
+  <div class="dashboard-container">
+    <div class="dashboard" v-if="!loading">
+      <ModalComponent
+        ref="startingCapitalAmount"
+        @close-modal="updateBalanceAndCloseModal"
+        v-show="showModal"
+        buttonContent="Save"
+      />
+      <div class="financials-container">
+        <FinancialsComponent :key="financialsComponentKey" />
+      </div>
+      <h4 class="progress-header">Net value progression</h4>
+      <Line
+        :key="chartComponentKey"
+        class="chart"
+        :data="chartData_USER"
+        :options="options"
+      />
+      <h4 class="progress-header">Stock progression</h4>
+      <Bar
+        :key="chartComponentKey"
+        class="chart"
+        :data="chartData_BAR_INVESTMENTS"
+        :options="options"
+      />
+      <h4 class="progress-header">Diversification graphic</h4>
+      <Pie class="chart" :data="chartData_PIE_INVESTMENTS" :options="options" />
     </div>
-    <h4 class="progress-header">My progress</h4>
-    <Line class="chart" :data="chartData_USER" :options="options" />
-    <h4 class="progress-header">My best investments</h4>
+    <div v-else>Loading...</div>
   </div>
-  <div v-else>Loading...</div>
 </template>
 
 <script setup>
@@ -36,8 +51,10 @@ import {
   Title,
   Tooltip,
   Legend,
+  BarElement,
+  ArcElement,
 } from "chart.js";
-import { Line } from "vue-chartjs";
+import { Line, Bar, Pie } from "vue-chartjs";
 
 ChartJS.register(
   CategoryScale,
@@ -46,15 +63,26 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  BarElement,
+  ArcElement
 );
 
 let chartData_USER;
+let chartData_BAR_INVESTMENTS;
+let chartData_PIE_INVESTMENTS;
 
 let showModal = ref(Boolean);
 let loading = ref(true);
 
 let financialsComponentKey = ref(1);
+let chartComponentKey = ref(1);
+
+let amountOfInvestments = ref([]);
+let percentualDifference = ref([]);
+let valueInvestedPerStock = ref([]);
+
+let chartData_PIE_INVESTMENTS_BACKGROUND_COLORS = ref([]);
 
 let areInvestmentsLoaded = ref(false);
 
@@ -88,6 +116,10 @@ setInterval(async () => {
   await userStore.getUserFromDbAndSetFinancials();
   financialsComponentKey.value += 1;
 }, 10000);
+
+setInterval(() => {
+  chartComponentKey.value += 1;
+}, 30000);
 onMounted(async () => {
   loading.value = true;
   const specificUser = await ApiData.getSpecificUser(getAuth().currentUser.uid);
@@ -106,6 +138,36 @@ onMounted(async () => {
   console.log(financialsComponentKey.value);
   console.log(accountStore.accountBalance);
 
+  accountStore.investments.forEach((investment) => {
+    amountOfInvestments.value.push(investment.stockTicker);
+
+    if (investment.buyPrice > investment.currentPrice) {
+      percentualDifference.value.push(
+        `-${(
+          Math.abs(
+            (investment.buyPrice - investment.currentPrice) /
+              investment.buyPrice
+          ) * 100
+        ).toFixed(3)}`
+      );
+    } else {
+      percentualDifference.value.push(
+        `${(
+          Math.abs(
+            (investment.buyPrice - investment.currentPrice) /
+              investment.buyPrice
+          ) * 100
+        ).toFixed(3)}`
+      );
+    }
+
+    valueInvestedPerStock.value.push(
+      `${investment.amountOfStocks * investment.currentPrice}`
+    );
+  });
+  console.log(valueInvestedPerStock.value);
+  console.log(amountOfInvestments);
+
   chartData_USER = {
     labels: ["Beginning", "Now"],
     datasets: [
@@ -113,6 +175,32 @@ onMounted(async () => {
         label: "",
         backgroundColor: "black",
         data: [accountStore.startingCapital, accountStore.accountBalance],
+      },
+    ],
+  };
+
+  chartData_BAR_INVESTMENTS = {
+    labels: amountOfInvestments.value,
+    datasets: [
+      {
+        label: "",
+        backgroundColor: "black",
+        data: percentualDifference.value,
+      },
+    ],
+  };
+
+  chartData_PIE_INVESTMENTS = {
+    labels: amountOfInvestments.value,
+    datasets: [
+      {
+        label: "USD",
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+        ],
+        data: valueInvestedPerStock.value,
       },
     ],
   };
@@ -157,5 +245,21 @@ const updateBalanceAndCloseModal = async () => {
   max-height: 300px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .dashboard {
+    width: 80%;
+  }
+  .dashboard-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .dashboard {
+    width: 65%;
+  }
 }
 </style>
