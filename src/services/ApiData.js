@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://stokkerbe.herokuapp.com/api';
+const BASE_URL = 'https://stokkerbe.herokuapp.com';
 
 const postUser = async (user) => {
     const response = await axios.post(`${BASE_URL}/User`, user)
