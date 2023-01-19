@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:62237/api';
+const BASE_URL = 'http://stokkerbe.com';
 
 const postUser = async (user) => {
     const response = await axios.post(`${BASE_URL}/User`, user)
