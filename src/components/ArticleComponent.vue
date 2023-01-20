@@ -20,6 +20,7 @@ defineProps(["content", "location"]);
 }
 
 .article-link {
+  font-size: 20px;
   color: black;
   text-decoration: none;
 }

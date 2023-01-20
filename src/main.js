@@ -13,6 +13,7 @@ import router from '/src/router/index.js';
 // FontAwesome
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGoogle, faGithub, faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // Toastify
@@ -21,7 +22,7 @@ import "vue-toastification/dist/index.css";
 
 import { initializeApp } from "firebase/app";
 
-library.add(faGoogle, faGithub, faFacebook);
+library.add(faGoogle, faGithub, faFacebook, faArrowDown, faArrowRight);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
