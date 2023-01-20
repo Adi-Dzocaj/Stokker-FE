@@ -148,6 +148,11 @@ console.log(toRaw(globalStore.alpacaNewsData));
 
 .arrow-right {
   display: none;
+  color: #dc8d8d;
+}
+
+.arrow-down {
+  color: #dc8d8d;
 }
 
 .paper-trading-explanation-container {
@@ -193,6 +198,10 @@ console.log(toRaw(globalStore.alpacaNewsData));
   .paper-trading-explanation {
     width: 90%;
   }
+
+  .instructions-header {
+    display: none;
+  }
   .paper-trading-explanation-container {
     display: flex;
     justify-content: center;
@@ -212,6 +221,9 @@ console.log(toRaw(globalStore.alpacaNewsData));
   }
   .instructions-box {
     flex-grow: 1;
+  }
+  .instructions-header {
+    display: inline;
   }
 }
 
