@@ -51,6 +51,9 @@ import { useAccountStore } from "../store/accountStore";
 import { useGlobalStore } from "../store/globalStore";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 
+import { useToast } from "vue-toastification";
+const toast = useToast();
+
 // ChartJS
 import {
   Chart as ChartJS,
@@ -226,18 +229,25 @@ onMounted(async () => {
 
 const updateBalanceAndCloseModal = async () => {
   getAuth().currentUser;
-  await ApiData.updateAccount(getAuth().currentUser.uid, {
-    startingCapital: startingCapitalAmount.value.modalAccountBalanceInput,
-    accountBalance: startingCapitalAmount.value.modalAccountBalanceInput,
-    unusedFunds: startingCapitalAmount.value.modalAccountBalanceInput,
-    creationDate: `${new Date(new Date().getTime() + HOUR_IN_MILLISECONDS)
-      .toISOString()
-      .slice(0, -5)}Z`,
-  });
+  if (
+    !startingCapitalAmount.value.modalAccountBalanceInput ||
+    startingCapitalAmount.value.modalAccountBalanceInput <= 0
+  ) {
+    toast.warning("You're trying to fool the system. Stop it!");
+  } else {
+    await ApiData.updateAccount(getAuth().currentUser.uid, {
+      startingCapital: startingCapitalAmount.value.modalAccountBalanceInput,
+      accountBalance: startingCapitalAmount.value.modalAccountBalanceInput,
+      unusedFunds: startingCapitalAmount.value.modalAccountBalanceInput,
+      creationDate: `${new Date(new Date().getTime() + HOUR_IN_MILLISECONDS)
+        .toISOString()
+        .slice(0, -5)}Z`,
+    });
 
-  userStore.getUserFromDbAndSetFinancials();
+    userStore.getUserFromDbAndSetFinancials();
 
-  showModal.value = false;
+    showModal.value = false;
+  }
 };
 </script>
 

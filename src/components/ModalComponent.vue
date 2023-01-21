@@ -5,12 +5,12 @@
       <div class="modal-content">
         <div class="instructions">
           <!-- <p>Write the amount of cash you want to start trading with</p> -->
-          <p class="muted-text">Example: 10.000 ( ten thousand )</p>
+          <p class="muted-text">Example: 10000 ( ten thousand )</p>
           <div class="input">
-            <input type="text" v-model="modalAccountBalanceInput" />
+            <input type="number" v-model="modalAccountBalanceInput" />
             <span>$</span>
           </div>
-          <p class="muted-text">This amount can be changed later on</p>
+          <p class="muted-text">The amount can not be changed later on</p>
         </div>
         <div class="modalButton" @click="$emit('close-modal')">
           <GeneralButton
