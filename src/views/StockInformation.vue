@@ -31,6 +31,11 @@
         <button
           :disabled="areOptionButtonsDisabled"
           class="option"
+          :class="
+            userRequestedChartDataBasedOnTime[0].active === true
+              ? 'option-active'
+              : null
+          "
           @click="setActiveData('dayData')"
         >
           1 day
@@ -38,6 +43,11 @@
         <button
           :disabled="areOptionButtonsDisabled"
           class="option"
+          :class="
+            userRequestedChartDataBasedOnTime[1].active === true
+              ? 'option-active'
+              : null
+          "
           @click="setActiveData('weekData')"
         >
           1 week
@@ -45,6 +55,11 @@
         <button
           :disabled="areOptionButtonsDisabled"
           class="option"
+          :class="
+            userRequestedChartDataBasedOnTime[2].active === true
+              ? 'option-active'
+              : null
+          "
           @click="setActiveData('monthData')"
         >
           1 month
@@ -52,6 +67,11 @@
         <button
           :disabled="areOptionButtonsDisabled"
           class="option"
+          :class="
+            userRequestedChartDataBasedOnTime[3].active === true
+              ? 'option-active'
+              : null
+          "
           @click="setActiveData('yearData')"
         >
           1 year
@@ -800,6 +820,11 @@ onMounted(async () => {
 
 .buy-button-container:hover {
   cursor: pointer;
+}
+
+.option-active {
+  background-color: #344d67;
+  color: #ffe1a1;
 }
 
 .modal-container {
