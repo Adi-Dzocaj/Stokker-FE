@@ -40,17 +40,13 @@ let filteredStockList = ref([]);
 onBeforeMount(async () => {
   stockList = await AlpacaData.getStocks();
 
-  console.log(stockList[0].tradable);
-
   stockList.filter((company) => {
     if (company.tradable !== false) {
       filteredStockList.value.push(company);
     }
   });
 
-  console.log(filteredStockList);
   isInputFieldDisabled.value = false;
-  console.log(stockList);
 });
 
 const searchStocks = computed(() => {

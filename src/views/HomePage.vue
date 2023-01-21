@@ -83,8 +83,6 @@ import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderCom
 
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
-
-console.log(toRaw(globalStore.alpacaNewsData));
 </script>
 
 <style scoped>

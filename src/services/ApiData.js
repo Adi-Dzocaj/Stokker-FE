@@ -22,7 +22,6 @@ const getSpecificUser = async (user) => {
 
 const getSpecificAccountInvestments = async (user) => {
     const response = await axios.get(`${BASE_URL}/Account/${user}`)
-    console.log(response)
     console.log(response.data.investments)
     return response.data.investments
 }

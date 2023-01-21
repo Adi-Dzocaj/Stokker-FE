@@ -49,8 +49,6 @@ const register = async () => {
       email.value,
       password.value
     );
-    console.log("Registered");
-    console.log(getAuth().currentUser.uid, getAuth().currentUser.email);
 
     const userUid = getAuth().currentUser.uid;
     await ApiData.postUser({
@@ -75,10 +73,6 @@ const authenticateWithGoogleAccount = async () => {
   const provider = new GoogleAuthProvider();
   try {
     await signInWithPopup(getAuth(), provider);
-    console.log("Registered with Google");
-    console.log(getAuth());
-    console.log(getAuth().currentUser.uid);
-    console.log(getAuth().currentUser.email);
     try {
       await ApiData.postUser({
         id: getAuth().currentUser.uid,

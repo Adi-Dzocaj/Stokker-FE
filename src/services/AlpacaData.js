@@ -8,24 +8,25 @@ const HEADERS = {
 
 const getNewsArticles = async () => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v1beta1/news`, HEADERS)
-        // console.log(response.data)
+        console.log(response.data)
         return response.data
 }
 
 const getSingleNewsArticle = async (symbol) => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v1beta1/news?symbols=${symbol}`, HEADERS)
-
+    console.log(response.data.news)
     return response.data.news
 }
 
 const getStocks = async () => {
     const response = await axios.get(`${Trading_API_BASE_URL}/v2/assets?asset_class=us_equity`, HEADERS)
-    // console.log(response.data)
+    console.log(response.data)
     return response.data
 }
 
 const getSingleStock = async (symbol) => {
     const response = await axios.get(`${Trading_API_BASE_URL}/v2/assets/${symbol}`, HEADERS)
+    console.log(response.data)
     return response.data
 }
 
@@ -37,13 +38,13 @@ const getStockInfo = async (symbol, start, end, timeframe) => {
 
 const getLatestStockInfo = async (symbol) => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/${symbol}/bars/latest`, HEADERS)
+    console.log(response.data.bar.c)
     return response.data.bar.c
-
 }
 
 const getMultipleStocksInfo = async (symbols) => {
     const response = await axios.get(`${MARKET_DATA_API_BASE_URL}/v2/stocks/bars/latest?symbols=${symbols}`, HEADERS)
-    // console.log(response)
+    console.log(response)
     return response
 }
 

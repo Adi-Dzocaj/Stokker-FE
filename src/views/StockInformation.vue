@@ -282,7 +282,6 @@ let userRequestedChartDataBasedOnTime = reactive([
 
 const setActiveData = (title) => {
   areOptionButtonsDisabled.value = true;
-  console.log(areOptionButtonsDisabled);
   userRequestedChartDataBasedOnTime.forEach((item) => {
     item.active = false;
   });
@@ -478,7 +477,6 @@ onMounted(async () => {
 
   watch(amountOfStock, () => {
     totalPurchasePriceLoader.value = true;
-    console.log(amountOfStock.value);
 
     stockPriceTimesAmountOfStock = (
       amountOfStock.value * stockData_WEEK[stockData_WEEK.length - 1].c

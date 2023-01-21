@@ -25,7 +25,6 @@ export const useGlobalStore = defineStore("global", () => {
         listOfInvestments.forEach(async (investment) => {
           investment.currentPrice = await AlpacaData.getLatestStockInfo(investment.stockTicker);
           await ApiData.updateInvestment(investment.id, {currentPrice: investment.currentPrice})
-          console.log(investment.currentPrice)
         })
       }
 

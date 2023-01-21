@@ -133,7 +133,6 @@ setInterval(() => {
 onMounted(async () => {
   loading.value = true;
   const specificUser = await ApiData.getSpecificUser(getAuth().currentUser.uid);
-  console.log(specificUser.data.account.accountBalance);
 
   if (specificUser.data.account.accountBalance > 0) {
     showModal.value = false;
@@ -145,8 +144,6 @@ onMounted(async () => {
   await accountStore.getUserAccountAndSetInvestments();
   await userStore.getUserFromDbAndSetFinancials();
   financialsComponentKey.value += 1;
-  console.log(financialsComponentKey.value);
-  console.log(accountStore.accountBalance);
 
   accountStore.investments.forEach((investment) => {
     amountOfInvestments.value.push(investment.stockTicker);
@@ -175,8 +172,6 @@ onMounted(async () => {
       `${investment.amountOfStocks * investment.currentPrice}`
     );
   });
-  console.log(valueInvestedPerStock.value);
-  console.log(amountOfInvestments);
 
   chartData_USER = {
     labels: ["Beginning", "Now"],
@@ -230,8 +225,6 @@ onMounted(async () => {
 });
 
 const updateBalanceAndCloseModal = async () => {
-  console.log(getAuth().currentUser.uid);
-  console.log(startingCapitalAmount.value.modalAccountBalanceInput);
   getAuth().currentUser;
   await ApiData.updateAccount(getAuth().currentUser.uid, {
     startingCapital: startingCapitalAmount.value.modalAccountBalanceInput,
@@ -281,6 +274,7 @@ const updateBalanceAndCloseModal = async () => {
   .dashboard {
     width: 80%;
   }
+
   .dashboard-container {
     display: flex;
     justify-content: center;

@@ -103,7 +103,6 @@ const userStore = useUserStore();
 let amountOfStock = ref(1);
 
 let isRequestedSaleAmountTooHigh = ref(false);
-console.log(clickedInvestment.value);
 let totalPurchasePriceLoader = ref(true);
 
 let stockPriceTimesAmountOfStock = ref(0);
@@ -118,7 +117,6 @@ const setAccountDetails = async () => {
   accountDetails = await ApiData.getSpecificAccountInvestments(
     getAuth().currentUser.uid
   );
-  console.log(accountDetails);
 
   await accountDetails.filter(async (item) => {
     if (item.buyPrice > item.currentPrice) {
@@ -169,7 +167,6 @@ const sellStockAndAddSaleValueToUnusedFunds = async () => {
   }
 
   loading.value = false;
-  console.log(loading.value);
 };
 
 let isRequestedSaleAmountHigherThanCurrentAmount = (index) => {
@@ -192,8 +189,6 @@ watch(
   () => {
     if (!clickedInvestmentLoader) {
       setTotalSaleValue(clickedInvestment.value);
-      console.log(stockPriceTimesAmountOfStock.value);
-      console.log(globalStore.showModal);
     }
   }
 );
