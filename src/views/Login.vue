@@ -156,7 +156,6 @@ const authenticateWithGoogleAccount = async () => {
 
 .login-menu-icon {
   font-size: 60px;
-  /* padding: 10px; */
   color: #344d67;
 }
 
@@ -164,5 +163,17 @@ const authenticateWithGoogleAccount = async () => {
 .login-menu-icon:hover {
   opacity: 0.8;
   cursor: pointer;
+}
+
+@media screen and (min-width: 1024px) {
+  .login-menu {
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .login-menu {
+    width: 40%;
+  }
 }
 </style>

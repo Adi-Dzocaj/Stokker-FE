@@ -182,7 +182,7 @@ onMounted(async () => {
     labels: ["Beginning", "Now"],
     datasets: [
       {
-        label: "",
+        label: "USD",
         backgroundColor: "black",
         data: [accountStore.startingCapital, accountStore.accountBalance],
       },
@@ -193,7 +193,7 @@ onMounted(async () => {
     labels: amountOfInvestments.value,
     datasets: [
       {
-        label: "",
+        label: "%",
         backgroundColor: "black",
         data: percentualDifference.value,
       },

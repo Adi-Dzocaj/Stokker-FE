@@ -169,4 +169,16 @@ const authenticateWithGoogleAccount = async () => {
   opacity: 0.8;
   cursor: pointer;
 }
+
+@media screen and (min-width: 1024px) {
+  .register-menu {
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .register-menu {
+    width: 40%;
+  }
+}
 </style>

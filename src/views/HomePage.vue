@@ -2,7 +2,7 @@
   <div class="home-page-container">
     <div class="hero-image">
       <div class="hero-content">
-        <h4>A simple trading platform for beginners</h4>
+        <h4>Paper trading platform for beginners</h4>
         <div class="hero-button" v-if="!userStore.user">
           <ButtonComponent
             color="#FFE1A1"
@@ -24,8 +24,8 @@
           </p>
           <p>
             Stokker is designed to lower the barrier-to-entry for investing in
-            stocks and gives you complete freedom to experiment in the US stock
-            market to see if your intuitions are correct.
+            stocks and gives you the freedom to experiment in the US stock
+            market and see if your intuitions are correct.
           </p>
           <p>
             We also provide real time stock related news, so that you stay up to
@@ -144,23 +144,25 @@ console.log(toRaw(globalStore.alpacaNewsData));
   padding: 20px;
   border: 3px solid #344d67;
   border-radius: 4px;
+  background-color: #d3e785;
 }
 
 .arrow-right {
   display: none;
-  color: #dc8d8d;
+  color: #344d67;
 }
 
 .arrow-down {
-  color: #dc8d8d;
+  color: #344d67;
 }
 
 .paper-trading-explanation-container {
   padding: 30px;
-  border: 1px solid #344d67;
+  border: 3px solid #344d67;
   border-radius: 4px;
   margin-bottom: 20px;
 }
+
 .paper-trading-explanation {
   display: flex;
   flex-direction: column;
@@ -226,10 +228,4 @@ console.log(toRaw(globalStore.alpacaNewsData));
     display: inline;
   }
 }
-
-/* @media screen and (min-width: 1440px) {
-  .stock-information {
-    width: 65%;
-  }
-} */
 </style>
