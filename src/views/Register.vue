@@ -93,8 +93,6 @@ const authenticateWithGoogleAccount = async () => {
 
 <style scoped>
 .register-container {
-  /* Header is 10vh, footer is 20vh */
-  height: calc(100vh - 10vh - 20vh);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -150,6 +148,10 @@ const authenticateWithGoogleAccount = async () => {
   border-radius: 4px;
   color: white;
   padding: 5px;
+}
+
+.register-button:hover {
+  cursor: pointer;
 }
 
 .register-menu-icon {

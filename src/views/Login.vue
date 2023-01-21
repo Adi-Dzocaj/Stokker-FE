@@ -69,8 +69,8 @@ const authenticateWithGoogleAccount = async () => {
   const provider = new GoogleAuthProvider();
   try {
     await signInWithPopup(getAuth(), provider);
-    console.log("Registered with Google");
-    toast.success("Google registration complete!");
+    console.log("logged in with Google");
+    toast.success("Successful Google login");
     router.push("/dashboard");
   } catch (error) {
     console.log(error.code);
@@ -81,8 +81,6 @@ const authenticateWithGoogleAccount = async () => {
 
 <style scoped>
 .login-container {
-  /* Header is 10vh, footer is 20vh */
-  height: calc(100vh - 10vh - 20vh);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -139,6 +137,10 @@ const authenticateWithGoogleAccount = async () => {
   border-radius: 4px;
   color: white;
   padding: 5px;
+}
+
+.login-button:hover {
+  cursor: pointer;
 }
 
 .registration-link {

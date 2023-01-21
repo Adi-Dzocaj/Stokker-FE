@@ -29,6 +29,12 @@
     <div v-if="accountDetails.length > 0">
       <div class="modal-container" v-show="globalStore.showModal">
         <div class="modal" v-if="accountDetails[clickedInvestment]">
+          <div class="close-x-button">
+            <font-awesome-icon
+              @click="globalStore.showModal = false"
+              icon="fa-solid fa-xmark"
+            />
+          </div>
           <h5>
             {{ accountDetails[clickedInvestment].title }}
           </h5>
@@ -285,7 +291,7 @@ onMounted(async () => {
   width: 300px;
   padding: 10px;
   padding-bottom: 40px;
-  padding-top: 40px;
+  padding-top: 20px;
   border: 3px solid #344d67;
   border-radius: 10px;
 }
@@ -346,6 +352,14 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.close-x-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  padding-right: 10px;
+  font-size: 20px;
 }
 
 @media screen and (min-width: 1024px) {

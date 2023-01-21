@@ -117,7 +117,13 @@
         />
       </div>
       <div class="modal-container" v-show="showModal">
-        <div class="modal" v-on:clickout="showModal = false">
+        <div class="modal">
+          <div class="close-x-button">
+            <font-awesome-icon
+              @click="showModal = false"
+              icon="fa-solid fa-xmark"
+            />
+          </div>
           <h5>{{ stockInformation.name }}</h5>
           <div class="modal-content">
             <p>Input the stock amount</p>
@@ -186,7 +192,6 @@ import ArticleComponent from "../components/ArticleComponent.vue";
 import ArticleSectionHeaderComponent from "../components/ArticleSectionHeaderComponent.vue";
 import { useAccountStore } from "../store/accountStore";
 import { useUserStore } from "../store/userStore";
-import "clickout-event";
 import { useToast } from "vue-toastification";
 import router from "/src/router/index.js";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
@@ -667,7 +672,7 @@ onMounted(async () => {
   width: 300px;
   padding: 10px;
   padding-bottom: 40px;
-  padding-top: 40px;
+  padding-top: 20px;
   border: 3px solid #344d67;
   border-radius: 10px;
 }
@@ -715,6 +720,14 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.close-x-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  padding-right: 10px;
+  font-size: 20px;
 }
 
 @media screen and (min-width: 1024px) {
