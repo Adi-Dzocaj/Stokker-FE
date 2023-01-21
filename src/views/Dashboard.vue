@@ -10,7 +10,7 @@
       <div class="financials-container">
         <FinancialsComponent :key="financialsComponentKey" />
       </div>
-      <h4 class="progress-header">Net value progression</h4>
+      <h4 class="progress-header">Net worth progression</h4>
       <Line
         :key="chartComponentKey"
         class="chart"

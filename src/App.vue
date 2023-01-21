@@ -38,7 +38,7 @@ onMounted(async () => {
 }
 
 .router-view {
-  min-height: calc(100vh - 10vh - 20vh);
+  min-height: calc(100vh - 10vh - 6vh);
 }
 
 .loading-container {
