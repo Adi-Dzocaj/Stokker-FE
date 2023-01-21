@@ -1,7 +1,6 @@
 <template>
   <div class="footer-container">
-    <div></div>
-    <div></div>
+    <h4>Stokker</h4>
   </div>
 </template>
 
@@ -9,16 +8,12 @@
 
 <style scoped>
 .footer-container {
-  padding: 10px;
   display: flex;
-  height: 20vh;
+  justify-content: center;
+  align-items: center;
+  color: #ffe1a1;
+  height: 6vh;
   width: 100%;
   background-color: #344d67;
-}
-
-.footer-container div:nth-child(1) {
-  width: 70%;
-  height: 100%;
-  border-right: 1px solid #ffe1a1;
 }
 </style>
