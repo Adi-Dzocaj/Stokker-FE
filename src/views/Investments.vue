@@ -6,18 +6,24 @@
     <h4 v-show="accountDetails.length > 0">
       All individual investments ({{ accountDetails.length }})
     </h4>
-    <div v-for="(investment, index) in accountDetails" :key="investment.id">
-      <div @click="setClickedInvestmentIndex(index)">
-        <InvestmentComponent
-          :title="investment.title"
-          :symbol="investment.stockTicker"
-          :amount="investment.amountOfStocks"
-          :buyPrice="investment.buyPrice"
-          :totalValue="investment.totalValue"
-          :currentPrice="investment.currentPrice"
-          :percentualDifference="`${investment.percentualDifference} %`"
-          :key="investmentComponentKey"
-        />
+    <div class="investments-container">
+      <div
+        class="investment"
+        v-for="(investment, index) in accountDetails"
+        :key="investment.id"
+      >
+        <div class="ip" @click="setClickedInvestmentIndex(index)">
+          <InvestmentComponent
+            :title="investment.title"
+            :symbol="investment.stockTicker"
+            :amount="investment.amountOfStocks"
+            :buyPrice="investment.buyPrice"
+            :totalValue="investment.totalValue"
+            :currentPrice="investment.currentPrice"
+            :percentualDifference="`${investment.percentualDifference} %`"
+            :key="investmentComponentKey"
+          />
+        </div>
       </div>
     </div>
     <div v-if="accountDetails.length > 0">
@@ -334,5 +340,25 @@ onMounted(async () => {
 
 .stockpanel-link:hover {
   text-decoration: underline;
+}
+
+.investments-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .investments-container {
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .investment {
+    flex-grow: 1;
+    width: 300px;
+    height: 100%;
+  }
 }
 </style>
