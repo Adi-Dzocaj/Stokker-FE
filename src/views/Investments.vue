@@ -36,7 +36,7 @@
             </p>
             <p>Input the amount of stocks you wish to sell</p>
             <div class="input">
-              <input type="text" v-model="amountOfStock" />
+              <input type="number" v-model="amountOfStock" />
             </div>
             <p>
               Total price:
@@ -100,7 +100,7 @@ let clickedInvestmentLoader = ref(true);
 const globalStore = useGlobalStore();
 const accountStore = useAccountStore();
 const userStore = useUserStore();
-let amountOfStock = ref(1);
+let amountOfStock = ref();
 
 let isRequestedSaleAmountTooHigh = ref(false);
 let totalPurchasePriceLoader = ref(true);
@@ -139,7 +139,10 @@ const setAccountDetails = async () => {
 const sellStockAndAddSaleValueToUnusedFunds = async () => {
   loading.value = true;
   if (
-    amountOfStock.value > accountDetails[clickedInvestment.value].amountOfStocks
+    amountOfStock.value >
+      accountDetails[clickedInvestment.value].amountOfStocks ||
+    !amountOfStock.value ||
+    amountOfStock.value <= 0
   ) {
     toast.warning("You're trying to fool the system. Stop it!");
   } else {
