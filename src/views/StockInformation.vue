@@ -122,7 +122,7 @@
           <div class="modal-content">
             <p>Input the stock amount</p>
             <div class="input">
-              <input type="text" v-model="amountOfStock" />
+              <input type="number" v-model="amountOfStock" />
             </div>
             <p>
               Total price:
@@ -337,30 +337,36 @@ const setCurrentStockRelatedDate = () => {
 };
 
 const addInvestmentToUser = async () => {
-  let investmentDetails = {
-    Title: stockInformation.name,
-    StockTicker: stockInformation.symbol,
-    AmountOfStocks: amountOfStock.value,
-    CurrentPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
-    BuyPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
-    PurchasedAt: `${new Date(new Date().getTime() - MINUTE_IN_MILLISECONDS * 20)
-      .toISOString()
-      .slice(0, -5)}Z`,
-  };
+  if (amountOfStock.value <= 0 || !amountOfStock) {
+    toast.warning("You're trying to fool the system. Stop it!");
+  } else {
+    let investmentDetails = {
+      Title: stockInformation.name,
+      StockTicker: stockInformation.symbol,
+      AmountOfStocks: amountOfStock.value,
+      CurrentPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
+      BuyPrice: stockData_WEEK[stockData_WEEK.length - 1].c,
+      PurchasedAt: `${new Date(
+        new Date().getTime() - MINUTE_IN_MILLISECONDS * 20
+      )
+        .toISOString()
+        .slice(0, -5)}Z`,
+    };
 
-  const response = await ApiData.postInvestment(
-    getAuth().currentUser.uid,
-    investmentDetails
-  );
-  userStore.getUserFromDbAndSetFinancials();
-  toast.success(
-    `Purchase of ${amountOfStock.value} ${stockInformation.symbol} complete!`
-  );
-  setTimeout(() => {
-    toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
-  }, 5000);
+    const response = await ApiData.postInvestment(
+      getAuth().currentUser.uid,
+      investmentDetails
+    );
+    userStore.getUserFromDbAndSetFinancials();
+    toast.success(
+      `Purchase of ${amountOfStock.value} ${stockInformation.symbol} complete!`
+    );
+    setTimeout(() => {
+      toast.success(`Updated funds: ${accountStore.unusedFunds} $`);
+    }, 5000);
 
-  router.push("/dashboard");
+    router.push("/dashboard");
+  }
 };
 
 onMounted(async () => {
