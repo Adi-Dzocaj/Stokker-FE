@@ -69,37 +69,137 @@
         <div class="current-day-stock-data">
           <div class="data-box">
             <p class="data-box-title">Opened at</p>
-            <p>{{ stockData_DAY[0].c }} $</p>
+            <p v-if="userRequestedChartDataBasedOnTime[0].active === true">
+              {{ stockData_DAY[0].c }} $
+            </p>
+            <p v-else-if="userRequestedChartDataBasedOnTime[1].active === true">
+              {{ stockData_WEEK[0].c }} $
+            </p>
+            <p v-else-if="userRequestedChartDataBasedOnTime[2].active === true">
+              {{ stockData_MONTH[0].c }} $
+            </p>
+            <p v-else-if="userRequestedChartDataBasedOnTime[3].active === true">
+              {{ stockData_YEAR[0].c }} $
+            </p>
           </div>
           <div class="data-box">
             <p class="data-box-title">Current price</p>
             <p>{{ stockData_DAY[stockData_DAY.length - 1].c }} $</p>
           </div>
           <div class="data-box">
-            <p class="data-box-title">Lowest today</p>
-            <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].l }} $</p>
-            <p v-else>Market is closed</p>
-          </div>
-          <div class="data-box">
-            <p></p>
-            <p class="data-box-title">Highest today</p>
-            <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].h }} $</p>
-            <p v-else>Market is closed</p>
-          </div>
-          <div class="data-box">
-            <p></p>
-            <p class="data-box-title">Percentual movement</p>
-            <p
-              class="negative-result"
-              v-if="
-                stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
-              "
+            <p class="data-box-title">Lowest value</p>
+            <div v-if="userRequestedChartDataBasedOnTime[0].active === true">
+              <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].l }} $</p>
+              <p v-else>Market is closed</p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[1].active === true"
             >
-              -{{ percentual_difference_DAY.toFixed(3) }} %
-            </p>
-            <p class="positive-percentage" v-else>
-              +{{ percentual_difference_DAY.toFixed(3) }} %
-            </p>
+              <p v-if="stockData_WHOLE_WEEK">
+                {{ stockData_WHOLE_WEEK[0].l }} $
+              </p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[2].active === true"
+            >
+              <p v-if="stockData_WHOLE_MONTH">
+                {{ stockData_WHOLE_MONTH[0].l }} $
+              </p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[3].active === true"
+            >
+              <p v-if="stockData_WHOLE_YEAR">
+                {{ stockData_WHOLE_YEAR[0].l }} $
+              </p>
+            </div>
+          </div>
+          <div class="data-box">
+            <p></p>
+            <p class="data-box-title">Highest value</p>
+            <div v-if="userRequestedChartDataBasedOnTime[0].active === true">
+              <p v-if="stockData_WHOLE_DAY">{{ stockData_WHOLE_DAY[0].h }} $</p>
+              <p v-else>Market is closed</p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[1].active === true"
+            >
+              <p>{{ stockData_WHOLE_WEEK[0].h }} $</p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[2].active === true"
+            >
+              <p>{{ stockData_WHOLE_MONTH[0].h }} $</p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[3].active === true"
+            >
+              <p>{{ stockData_WHOLE_YEAR[0].h }} $</p>
+            </div>
+          </div>
+          <div class="data-box">
+            <p class="data-box-title">Percentual movement</p>
+            <div v-if="userRequestedChartDataBasedOnTime[0].active === true">
+              <p
+                class="negative-result"
+                v-if="
+                  stockData_DAY[0].c > stockData_DAY[stockData_DAY.length - 1].c
+                "
+              >
+                -{{ percentual_difference_DAY.toFixed(3) }} %
+              </p>
+              <p class="positive-percentage" v-else>
+                +{{ percentual_difference_DAY.toFixed(3) }} %
+              </p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[1].active === true"
+            >
+              <p
+                class="negative-result"
+                v-if="
+                  stockData_WEEK[0].c >
+                  stockData_WEEK[stockData_WEEK.length - 1].c
+                "
+              >
+                -{{ percentual_difference_WEEK.toFixed(3) }} %
+              </p>
+              <p class="positive-percentage" v-else>
+                +{{ percentual_difference_WEEK.toFixed(3) }} %
+              </p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[2].active === true"
+            >
+              <p
+                class="negative-result"
+                v-if="
+                  stockData_MONTH[0].c >
+                  stockData_MONTH[stockData_MONTH.length - 1].c
+                "
+              >
+                -{{ percentual_difference_MONTH.toFixed(3) }} %
+              </p>
+              <p class="positive-percentage" v-else>
+                +{{ percentual_difference_MONTH.toFixed(3) }} %
+              </p>
+            </div>
+            <div
+              v-else-if="userRequestedChartDataBasedOnTime[3].active === true"
+            >
+              <p
+                class="negative-result"
+                v-if="
+                  stockData_YEAR[0].c >
+                  stockData_YEAR[stockData_YEAR.length - 1].c
+                "
+              >
+                -{{ percentual_difference_YEAR.toFixed(3) }} %
+              </p>
+              <p class="positive-percentage" v-else>
+                +{{ percentual_difference_YEAR.toFixed(3) }} %
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -196,19 +296,6 @@ import { useToast } from "vue-toastification";
 import router from "/src/router/index.js";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 
-const toast = useToast();
-
-const accountStore = useAccountStore();
-const userStore = useUserStore();
-
-const YEAR_IN_MILLISECONDS = 31556926000;
-const MONTH_IN_MILLISECONDS = 2592000000;
-const WEEK_IN_MILLISECONDS = 604800000;
-const DAY_IN_MILLISECONDS = 86400000;
-const MINUTE_IN_MILLISECONDS = 60000;
-
-let showModal = ref(false);
-
 // ChartJS
 import {
   Chart as ChartJS,
@@ -233,6 +320,19 @@ ChartJS.register(
   Legend
 );
 
+const toast = useToast();
+
+const accountStore = useAccountStore();
+const userStore = useUserStore();
+
+const YEAR_IN_MILLISECONDS = 31556926000;
+const MONTH_IN_MILLISECONDS = 2592000000;
+const WEEK_IN_MILLISECONDS = 604800000;
+const DAY_IN_MILLISECONDS = 86400000;
+const MINUTE_IN_MILLISECONDS = 60000;
+
+let showModal = ref(false);
+
 let chartData_YEAR = Array;
 let chartData_MONTH = Array;
 let chartData_WEEK = Array;
@@ -244,6 +344,9 @@ let stockData_WEEK = ref([]);
 let stockData_DAY = ref([]);
 
 let stockData_WHOLE_DAY = ref([]);
+let stockData_WHOLE_WEEK = ref([]);
+let stockData_WHOLE_MONTH = ref([]);
+let stockData_WHOLE_YEAR = ref([]);
 
 let current_stock_related_date;
 
@@ -271,6 +374,9 @@ const amountOfBars_DAY = [];
 const closingValueBars_DAY = [];
 
 let percentual_difference_DAY = Number;
+let percentual_difference_WEEK = Number;
+let percentual_difference_MONTH = Number;
+let percentual_difference_YEAR = Number;
 
 let stockInformation = reactive({});
 let stockNews = ref([]);
@@ -420,6 +526,7 @@ onMounted(async () => {
     CURRENT_TIME_MINUS_20_MIN_ISO,
     "1Day"
   );
+
   stockData_WEEK = await AlpacaData.getStockInfo(
     props.symbol,
     CURRENT_TIME_MINUS_1_WEEK_ISO,
@@ -439,6 +546,27 @@ onMounted(async () => {
     CURRENT_TIME_MINUS_1_DAY_ISO,
     CURRENT_TIME_MINUS_20_MIN_ISO,
     "1Day"
+  );
+
+  stockData_WHOLE_WEEK = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_WEEK_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "1Week"
+  );
+
+  stockData_WHOLE_MONTH = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_MONTH_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "1Month"
+  );
+
+  stockData_WHOLE_YEAR = await AlpacaData.getStockInfo(
+    props.symbol,
+    CURRENT_TIME_MINUS_1_YEAR_ISO,
+    CURRENT_TIME_MINUS_20_MIN_ISO,
+    "12Month"
   );
 
   if (stockData_YEAR) {
@@ -467,10 +595,29 @@ onMounted(async () => {
       closingValueBars_DAY.push(bar.c);
     });
 
+    console.log(stockData_DAY);
+    console.log(stockData_WHOLE_DAY);
+
+    console.log(stockData_WEEK);
     percentual_difference_DAY =
       Math.abs(
         (stockData_DAY[0].c - stockData_DAY[stockData_DAY.length - 1].c) /
           stockData_DAY[0].c
+      ) * 100;
+    percentual_difference_WEEK =
+      Math.abs(
+        (stockData_WEEK[0].c - stockData_WEEK[stockData_WEEK.length - 1].c) /
+          stockData_WEEK[0].c
+      ) * 100;
+    percentual_difference_MONTH =
+      Math.abs(
+        (stockData_MONTH[0].c - stockData_MONTH[stockData_MONTH.length - 1].c) /
+          stockData_MONTH[0].c
+      ) * 100;
+    percentual_difference_YEAR =
+      Math.abs(
+        (stockData_YEAR[0].c - stockData_YEAR[stockData_YEAR.length - 1].c) /
+          stockData_YEAR[0].c
       ) * 100;
   }
 

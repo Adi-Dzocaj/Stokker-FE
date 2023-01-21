@@ -272,6 +272,35 @@ onMounted(async () => {
   padding: 4px;
 }
 
+.portfolio-empty-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.stockpanel-link {
+  text-decoration: none;
+}
+
+.stockpanel-link:hover {
+  text-decoration: underline;
+}
+
+.investments-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.close-x-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  padding-right: 10px;
+  font-size: 20px;
+}
+
 /* Modal */
 
 .modal-container {
@@ -331,35 +360,6 @@ onMounted(async () => {
 
 .negative-result {
   color: red;
-}
-
-.portfolio-empty-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid lightgray;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.stockpanel-link {
-  text-decoration: none;
-}
-
-.stockpanel-link:hover {
-  text-decoration: underline;
-}
-
-.investments-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.close-x-button {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 20px;
-  padding-right: 10px;
-  font-size: 20px;
 }
 
 @media screen and (min-width: 1024px) {
