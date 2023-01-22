@@ -1,14 +1,10 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 
+// Pinia Global Store
 import { createPinia } from 'pinia';
 
 import router from '/src/router/index.js';
-
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-// import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js'
 
 // FontAwesome
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -16,13 +12,14 @@ import { faGoogle, faGithub, faFacebook } from "@fortawesome/free-brands-svg-ico
 import { faArrowDown, faArrowRight, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-// Toastify
+library.add(faGoogle, faGithub, faFacebook, faArrowDown, faArrowRight, faXmark);
+
+// Toastification
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+// Firebase
 import { initializeApp } from "firebase/app";
-
-library.add(faGoogle, faGithub, faFacebook, faArrowDown, faArrowRight, faXmark);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -38,5 +35,3 @@ initializeApp(firebaseConfig);
 createApp(App).use(router).use(Toast, {
   maxToasts: 5,
 }).component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).mount('#app');
-
-// .use(bootstrap)
